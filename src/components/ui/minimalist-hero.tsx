@@ -92,47 +92,47 @@ export const MinimalistHero = ({
         }
         @media (min-width: 768px) {
           .minimalist-hero-root {
-            --circle-size: 320px;
-            --title-font-size: 4.75rem;
+            --circle-size: 260px;
+            --title-font-size: 4.25rem;
           }
         }
         @media (min-width: 1024px) {
           .minimalist-hero-root {
-            --circle-size: 380px;
-            --title-font-size: 5.75rem;
+            --circle-size: 320px;
+            --title-font-size: 5.25rem;
           }
         }
         @media (min-width: 1280px) {
           .minimalist-hero-root {
-            --circle-size: 460px;
-            --title-font-size: 7.25rem;
+            --circle-size: 400px;
+            --title-font-size: 6.75rem;
           }
         }
         @media (min-width: 1536px) {
           .minimalist-hero-root {
-            --circle-size: 500px;
-            --title-font-size: 8.25rem;
+            --circle-size: 450px;
+            --title-font-size: 8rem;
           }
         }
         
         /* Height adjustments on desktop to prevent vertical overflow of the circle */
         @media (min-width: 768px) and (max-height: 950px) {
           .minimalist-hero-root {
-            --circle-size: clamp(320px, 44vh, 440px);
+            --circle-size: clamp(260px, 42vh, 400px);
             padding-top: 5.5rem !important;
             padding-bottom: 2.5rem !important;
           }
         }
         @media (min-width: 768px) and (max-height: 800px) {
           .minimalist-hero-root {
-            --circle-size: clamp(290px, 48vh, 390px);
+            --circle-size: clamp(240px, 46vh, 350px);
             padding-top: 5rem !important;
             padding-bottom: 2rem !important;
           }
         }
         @media (min-width: 768px) and (max-height: 680px) {
           .minimalist-hero-root {
-            --circle-size: clamp(250px, 50vh, 340px);
+            --circle-size: clamp(220px, 48vh, 300px);
             padding-top: 4.5rem !important;
             padding-bottom: 1.5rem !important;
           }
@@ -229,7 +229,7 @@ export const MinimalistHero = ({
       </AnimatePresence>
 
       {/* Main Content Area - Grid Column Order Optimized for Responsiveness */}
-      <div className="hero-grid-layout relative grid w-full max-w-7xl mx-auto flex-grow grid-cols-1 items-center gap-y-8 sm:gap-y-10 md:gap-x-8 lg:gap-x-16 py-8 md:py-0">
+      <div className="hero-grid-layout relative grid w-full max-w-7xl mx-auto flex-grow grid-cols-1 items-center gap-y-8 sm:gap-y-10 md:gap-x-6 lg:gap-x-8 xl:gap-x-12 py-8 md:py-0">
         
         {/* Left Text Content - Displays last on mobile (order-3), first on desktop (md:order-1) */}
         <motion.div
@@ -238,7 +238,7 @@ export const MinimalistHero = ({
           transition={{ duration: 0.6, delay: 1 }}
           className="z-20 order-3 md:order-1 text-center md:text-left px-4 md:px-0"
         >
-          <p className="mx-auto max-w-sm md:max-w-md text-base md:text-lg lg:text-xl leading-relaxed text-foreground/80 md:mx-0">{mainText}</p>
+          <p className="mx-auto max-w-sm md:max-w-md text-base lg:text-lg xl:text-xl leading-relaxed text-foreground/80 md:mx-0">{mainText}</p>
           <a href={readMoreLink} className="mt-4 inline-block text-sm md:text-base font-medium text-foreground underline decoration-from-font">
             Read More
           </a>
@@ -313,7 +313,7 @@ export const MinimalistHero = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.2 }}
-          className="z-20 order-1 md:order-3 flex items-center justify-center text-center md:justify-start md:pl-6 lg:pl-12"
+          className="z-20 order-1 md:order-3 flex items-center justify-center text-center md:justify-start md:pl-4 lg:pl-6 xl:pl-10"
         >
           <h1
             style={{
