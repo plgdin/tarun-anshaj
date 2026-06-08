@@ -1,8 +1,11 @@
 import React from 'react';
 import { FadeIn } from './FadeIn';
 import { AnimatedText } from './AnimatedText';
+import { useCms } from '@/context/CmsContext';
 
 export const AboutSection: React.FC = () => {
+  const { data } = useCms();
+
   return (
     <section
       id="about"
@@ -85,7 +88,7 @@ export const AboutSection: React.FC = () => {
 
         {/* Animated paragraph */}
         <AnimatedText
-          text="With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!"
+          text={data.aboutContent.description1 || "With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!"}
           className="text-textLight font-medium text-center leading-relaxed max-w-[560px] text-[clamp(1rem,2vw,1.35rem)]"
         />
       </div>

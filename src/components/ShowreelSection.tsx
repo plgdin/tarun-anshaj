@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { useCms } from '@/context/CmsContext';
 
 export const ShowreelSection: React.FC = () => {
+  const { data } = useCms();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -70,7 +72,7 @@ export const ShowreelSection: React.FC = () => {
             >
               {/* Cinematic Video */}
               <video 
-                src="/6.mp4"
+                src={data.heroContent.featuredVideoUrl || "/6.mp4"}
                 autoPlay
                 loop
                 muted

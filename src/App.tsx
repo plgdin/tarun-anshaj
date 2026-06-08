@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HeroSection } from './components/HeroSection';
 import { MarqueeSection } from './components/MarqueeSection';
 import { AboutSection } from './components/AboutSection';
 import { ShowreelSection } from './components/ShowreelSection';
 import { ProjectsSection } from './components/ProjectsSection';
 import { ContactSection } from './components/ContactSection';
+import Admin from './pages/Admin';
+import { CmsProvider } from './context/CmsContext';
+import { Toaster } from 'sonner';
 
-function App() {
-
+function Frontend() {
   // Enable smooth scroll behavior on HTML anchor clicks
   useEffect(() => {
     const handleAnchorClick = (e: MouseEvent) => {
@@ -55,6 +58,20 @@ function App() {
       {/* 6. Contact Section (Footer) */}
       <ContactSection />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <CmsProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Frontend />} />
+          <Route path="/admin/*" element={<Admin />} />
+        </Routes>
+      </BrowserRouter>
+      <Toaster position="top-center" theme="dark" richColors />
+    </CmsProvider>
   );
 }
 

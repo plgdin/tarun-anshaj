@@ -1,12 +1,18 @@
 import React from 'react';
 import { FadeIn } from './FadeIn';
-import { Mail, Linkedin, Instagram, ArrowUpRight } from 'lucide-react';
+import { Mail, Linkedin, Instagram, ArrowUpRight, Youtube, Globe } from 'lucide-react';
+import { useCms } from '@/context/CmsContext';
 
 export const ContactSection: React.FC = () => {
+  const { data } = useCms();
+  const { siteSettings } = data;
+
+  const instaHandle = siteSettings.instagramUrl ? siteSettings.instagramUrl.split('/').pop() : 'tarun_kapoor10';
+
   const socialLinks = [
-    { name: 'Email', icon: Mail, url: 'mailto:tarun@3dcreator.com', handle: 'tarun@3dcreator.com' },
-    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com', handle: 'Tarun Kapoor' },
-    { name: 'Instagram', icon: Instagram, url: 'https://instagram.com/tarun_kapoor10', handle: '@tarun_kapoor10' },
+    { name: 'Email', icon: Mail, url: siteSettings.email ? `mailto:${siteSettings.email}` : 'mailto:tarun@3dcreator.com', handle: siteSettings.email || 'tarun@3dcreator.com' },
+    { name: 'LinkedIn', icon: Linkedin, url: siteSettings.linkedinUrl || 'https://linkedin.com', handle: siteSettings.siteName || 'Tarun Kapoor' },
+    { name: 'Instagram', icon: Instagram, url: siteSettings.instagramUrl || 'https://instagram.com/tarun_kapoor10', handle: `@${instaHandle}` },
   ];
 
   return (
@@ -74,7 +80,7 @@ export const ContactSection: React.FC = () => {
 
         {/* Footer info */}
         <FadeIn delay={0.5} y={10} className="z-10 text-xs sm:text-sm text-[#D7E2EA]/40 uppercase tracking-widest mt-8">
-          <p>© {new Date().getFullYear()} TARUN KAPOOR. ALL RIGHTS RESERVED.</p>
+          <p>{data.footerContent.copyright.replace('{year}', new Date().getFullYear().toString()) || `© ${new Date().getFullYear()} ${siteSettings.siteName || "TARUN KAPOOR"}. ALL RIGHTS RESERVED.`}</p>
         </FadeIn>
       </div>
     </section>

@@ -1,61 +1,12 @@
 import React, { useState } from 'react';
 import { ContainerScroll } from './ui/container-scroll-animation';
-
-const projects = [
-  { 
-    id: 1, 
-    type: 'youtube', 
-    name: 'Echoes of Silence', 
-    desc: 'Short Film • Director & Writer • 1.2M Views', 
-    image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&auto=format&fit=crop&q=80', 
-    aspect: 'wide' 
-  },
-  { 
-    id: 2, 
-    type: 'short', 
-    name: 'Behind the Lens', 
-    desc: 'Cinematic Reels • Actor • 500K Views', 
-    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80', 
-    aspect: 'tall' 
-  },
-  { 
-    id: 3, 
-    type: 'youtube', 
-    name: 'The Midnight Screenplay', 
-    desc: 'Writing Masterclass • Writer • 850K Views', 
-    image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&auto=format&fit=crop&q=80', 
-    aspect: 'wide' 
-  },
-  { 
-    id: 4, 
-    type: 'short', 
-    name: 'Monologue Series', 
-    desc: 'TikTok Drama • Actor • 2.1M Views', 
-    image: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&auto=format&fit=crop&q=80', 
-    aspect: 'tall' 
-  },
-  { 
-    id: 5, 
-    type: 'youtube', 
-    name: 'Indie Film Breakdown', 
-    desc: 'Director Commentary • 400K Views', 
-    image: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=800&auto=format&fit=crop&q=80', 
-    aspect: 'wide' 
-  },
-  { 
-    id: 6, 
-    type: 'short', 
-    name: 'Scene Study: Hamlet', 
-    desc: 'Instagram Reels • Actor • 3.5M Views', 
-    image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&auto=format&fit=crop&q=80', 
-    aspect: 'tall' 
-  },
-];
+import { useCms } from '@/context/CmsContext';
 
 export const ProjectsSection: React.FC = () => {
-    const [filter, setFilter] = useState<'all' | 'short' | 'youtube'>('all');
+    const { data } = useCms();
+    const [filter, setFilter] = useState<string>('all');
 
-    const filtered = filter === 'all' ? projects : projects.filter(p => p.type === filter);
+    const filtered = filter === 'all' ? data.videos : data.videos.filter(p => p.category === filter);
 
     return (
         <section className="work" id="projects" style={{ height: 'auto', padding: '0 0 6rem 0' }}>
@@ -82,15 +33,21 @@ export const ProjectsSection: React.FC = () => {
                         
                         {/* Filter Tabs inside the window dashboard */}
                         <div className="portfolio-studio-tabs">
-                            {(['all', 'short', 'youtube'] as const).map((tab) => (
+                            <button
+                                onClick={() => setFilter('all')}
+                                className={`portfolio-studio-tab-btn ${filter === 'all' ? 'active' : ''}`}
+                            >
+                                All Work
+                            </button>
+                            {data.categories.map((cat) => (
                                 <button
-                                    key={tab}
-                                    onClick={() => setFilter(tab)}
+                                    key={cat.id}
+                                    onClick={() => setFilter(cat.slug)}
                                     className={`portfolio-studio-tab-btn ${
-                                        filter === tab ? 'active' : ''
+                                        filter === cat.slug ? 'active' : ''
                                     }`}
                                 >
-                                    {tab === 'all' ? 'All Work' : tab === 'short' ? 'Shorts' : 'YouTube'}
+                                    {cat.title}
                                 </button>
                             ))}
                         </div>
@@ -102,8 +59,8 @@ export const ProjectsSection: React.FC = () => {
                             <div key={p.id} className="studio-item">
                                 <div className="studio-item-visual">
                                     <img
-                                        src={p.image}
-                                        alt={p.name}
+                                        src={p.thumbnail || ''}
+                                        alt={p.title}
                                     />
                                     <div className="studio-play-overlay">
                                         <div className="studio-play-btn">
@@ -114,14 +71,14 @@ export const ProjectsSection: React.FC = () => {
                                     </div>
                                     
                                     <div className="studio-creator-badge">
-                                        <img src="/tarun-avatar.png" alt={p.name} />
-                                        <span>Tarun Kapoor</span>
+                                        <img src="/tarun-avatar.png" alt={p.title} />
+                                        <span>{data.siteSettings.siteName || "Tarun Kapoor"}</span>
                                     </div>
                                 </div>
                                 
                                 <div className="studio-item-info">
-                                    <h4 className="studio-item-name">{p.name}</h4>
-                                    <p className="studio-item-desc">{p.desc}</p>
+                                    <h4 className="studio-item-name">{p.title}</h4>
+                                    <p className="studio-item-desc">{p.description}</p>
                                 </div>
                             </div>
                         ))}

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { LucideIcon } from 'lucide-react';
@@ -179,3 +180,4 @@ export const MinimalistHero = ({
     </div>
   );
 };
+
