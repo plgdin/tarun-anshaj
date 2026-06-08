@@ -229,7 +229,7 @@ export const MinimalistHero = ({
       </AnimatePresence>
 
       {/* Main Content Area - Grid Column Order Optimized for Responsiveness */}
-      <div className="hero-grid-layout relative grid w-full max-w-7xl mx-auto flex-grow grid-cols-1 items-center gap-y-8 sm:gap-y-10 md:gap-x-4 lg:gap-x-8 py-8 md:py-0">
+      <div className="hero-grid-layout relative grid w-full max-w-6xl mx-auto flex-grow grid-cols-1 items-center gap-y-8 sm:gap-y-10 md:gap-x-4 lg:gap-x-8 py-8 md:py-0">
         
         {/* Left Text Content - Displays last on mobile (order-3), first on desktop (md:order-1) */}
         <motion.div
@@ -313,7 +313,7 @@ export const MinimalistHero = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.2 }}
-          className="z-20 order-1 md:order-3 flex items-center justify-center text-center md:justify-start md:text-left"
+          className="z-20 order-1 md:order-3 flex items-center justify-center text-center md:justify-start md:-ml-8 lg:-ml-12"
         >
           <h1
             style={{
