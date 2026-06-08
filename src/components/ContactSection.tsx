@@ -32,7 +32,7 @@ export const ContactSection: React.FC = () => {
 
         {/* Heading */}
         <FadeIn delay={0} y={30} className="z-10">
-          <h2 className="hero-heading uppercase text-[clamp(2.5rem,10vw,120px)] leading-none mb-6 font-montserrat">
+          <h2 className="hero-heading uppercase text-[clamp(2.5rem,10vw,120px)] leading-none mb-6">
             <span className="font-black">Get</span> <span className="font-extralight text-foreground/60">In Touch</span>
           </h2>
         </FadeIn>
@@ -66,10 +66,10 @@ export const ContactSection: React.FC = () => {
                       <Icon size={20} />
                     </div>
                     <div className="text-left">
-                      <span className="text-xs text-[#D7E2EA]/50 uppercase tracking-wider block">
+                      <span className="text-xs text-[#D7E2EA]/50 uppercase tracking-wider block font-body">
                         {social.name}
                       </span>
-                      <span className="text-sm sm:text-base font-medium text-textLight">
+                      <span className="text-sm sm:text-base font-medium text-textLight font-body">
                         {social.handle}
                       </span>
                     </div>
@@ -85,7 +85,7 @@ export const ContactSection: React.FC = () => {
         </div>
 
         {/* Footer info */}
-        <FadeIn delay={0.5} y={10} className="z-10 text-xs sm:text-sm text-[#D7E2EA]/40 uppercase tracking-widest mt-8">
+        <FadeIn delay={0.5} y={10} className="z-10 text-xs sm:text-sm text-[#D7E2EA]/40 uppercase tracking-widest mt-8 font-footer">
           <p>{(data.footerContent.copyright || '').replace('{year}', new Date().getFullYear().toString()) || `© ${new Date().getFullYear()} ${siteSettings.siteName?.toUpperCase() || "TARUN KAPOOR"}. ALL RIGHTS RESERVED.`}</p>
         </FadeIn>
       </div>

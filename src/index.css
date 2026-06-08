@@ -36,7 +36,7 @@
 html, body, #root {
   background-color: #0C0C0C;
   color: #D7E2EA;
-  font-family: 'Kanit', sans-serif;
+  font-family: var(--font-body), sans-serif;
   width: 100%;
   min-height: 100vh;
   margin: 0;
@@ -45,7 +45,7 @@ html, body, #root {
 
 /* Custom class for hero-heading */
 .hero-heading {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-title), sans-serif;
   background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -89,7 +89,7 @@ html, body, #root {
   margin-bottom: 1.25rem;
 }
 .section-header h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-title), sans-serif;
   font-size: clamp(3.5rem, 8vw, 6rem);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -353,7 +353,7 @@ html, body, #root {
 }
 
 .hero-bg-text {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-title), sans-serif;
   font-size: clamp(6rem, 16vw, 16rem);
   font-weight: 950;
   letter-spacing: -0.04em;

@@ -7,8 +7,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Kanit', 'sans-serif'],
-        montserrat: ['Montserrat', 'sans-serif'],
+        sans: ['var(--font-body)', 'sans-serif'],
+        montserrat: ['var(--font-title)', 'sans-serif'],
+        title: ['var(--font-title)', 'sans-serif'],
+        body: ['var(--font-body)', 'sans-serif'],
+        header: ['var(--font-header)', 'sans-serif'],
+        footer: ['var(--font-footer)', 'sans-serif'],
       },
       colors: {
         darkBg: '#0C0C0C',

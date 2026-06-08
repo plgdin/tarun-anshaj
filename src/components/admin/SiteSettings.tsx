@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 const AVAILABLE_FONTS = [
   'Antonio',
   'Inter',
+  'Kanit',
   'Roboto',
   'Outfit',
   'Lexend Peta',
@@ -26,10 +27,10 @@ const SiteSettings = () => {
   const { data, updateSiteSettings, updatePassword, exportData, importData, resetToDefaults } = useCms();
   const [siteName, setSiteName] = useState(data.siteSettings.siteName);
   const [siteDesc, setSiteDesc] = useState(data.siteSettings.siteDescription);
-  const [titleFont, setTitleFont] = useState(data.siteSettings.titleFont || 'Antonio');
-  const [descriptionFont, setDescriptionFont] = useState(data.siteSettings.descriptionFont || 'Lexend Peta');
-  const [headerFont, setHeaderFont] = useState(data.siteSettings.headerFont || 'Antonio');
-  const [footerFont, setFooterFont] = useState(data.siteSettings.footerFont || 'Lexend Peta');
+  const [titleFont, setTitleFont] = useState(data.siteSettings.titleFont || 'Montserrat');
+  const [descriptionFont, setDescriptionFont] = useState(data.siteSettings.descriptionFont || 'Kanit');
+  const [headerFont, setHeaderFont] = useState(data.siteSettings.headerFont || 'Montserrat');
+  const [footerFont, setFooterFont] = useState(data.siteSettings.footerFont || 'Kanit');
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showResetDialog, setShowResetDialog] = useState(false);
@@ -46,6 +47,14 @@ const SiteSettings = () => {
       footerFont
     });
     toast.success('Site settings saved');
+  };
+
+  const handleResetFonts = () => {
+    setTitleFont('Montserrat');
+    setDescriptionFont('Kanit');
+    setHeaderFont('Montserrat');
+    setFooterFont('Kanit');
+    toast.success('Typography reset to original defaults. Remember to save.');
   };
 
   const handleChangePassword = async () => {
@@ -94,10 +103,10 @@ const SiteSettings = () => {
     resetToDefaults();
     setSiteName('TARUN KAPOOR');
     setSiteDesc('Director & Cinematographer');
-    setTitleFont('Antonio');
-    setDescriptionFont('Lexend Peta');
-    setHeaderFont('Antonio');
-    setFooterFont('Lexend Peta');
+    setTitleFont('Montserrat');
+    setDescriptionFont('Kanit');
+    setHeaderFont('Montserrat');
+    setFooterFont('Kanit');
     setShowResetDialog(false);
     toast.success('Reset to defaults');
   };
@@ -105,10 +114,10 @@ const SiteSettings = () => {
   const settingsChanged = 
     siteName !== data.siteSettings.siteName || 
     siteDesc !== data.siteSettings.siteDescription ||
-    titleFont !== (data.siteSettings.titleFont || 'Antonio') ||
-    descriptionFont !== (data.siteSettings.descriptionFont || 'Lexend Peta') ||
-    headerFont !== (data.siteSettings.headerFont || 'Antonio') ||
-    footerFont !== (data.siteSettings.footerFont || 'Lexend Peta');
+    titleFont !== (data.siteSettings.titleFont || 'Montserrat') ||
+    descriptionFont !== (data.siteSettings.descriptionFont || 'Kanit') ||
+    headerFont !== (data.siteSettings.headerFont || 'Montserrat') ||
+    footerFont !== (data.siteSettings.footerFont || 'Kanit');
 
   return (
     <div className="space-y-6">
@@ -135,6 +144,12 @@ const SiteSettings = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3 p-4 bg-secondary/30 rounded-lg border border-border">
+              <div className="p-3 bg-background rounded border border-border mb-3 overflow-hidden">
+                <p className="text-xs text-muted-foreground mb-2">Live Preview</p>
+                <div style={{ fontFamily: headerFont }} className="text-primary tracking-wider text-xl uppercase font-bold text-shadow-glow">
+                  {siteName || 'TARUN KAPOOR'}
+                </div>
+              </div>
               <div>
                 <Label>Header & Logo Font</Label>
                 <Select value={headerFont} onValueChange={setHeaderFont}>
@@ -148,15 +163,15 @@ const SiteSettings = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="p-3 bg-background rounded border border-border mt-2 overflow-hidden">
-                <p className="text-xs text-muted-foreground mb-2">Live Preview</p>
-                <div style={{ fontFamily: headerFont }} className="text-primary tracking-wider text-xl uppercase font-bold text-shadow-glow">
-                  {siteName || 'TARUN KAPOOR'}
-                </div>
-              </div>
             </div>
 
             <div className="space-y-3 p-4 bg-secondary/30 rounded-lg border border-border">
+              <div className="p-3 bg-background rounded border border-border mb-3 overflow-hidden">
+                <p className="text-xs text-muted-foreground mb-2">Live Preview</p>
+                <div style={{ fontFamily: titleFont }} className="text-primary text-2xl uppercase tracking-wide font-bold">
+                  Cinematic Ad Films
+                </div>
+              </div>
               <div>
                 <Label>Main Titles Font</Label>
                 <Select value={titleFont} onValueChange={setTitleFont}>
@@ -170,15 +185,15 @@ const SiteSettings = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="p-3 bg-background rounded border border-border mt-2 overflow-hidden">
-                <p className="text-xs text-muted-foreground mb-2">Live Preview</p>
-                <div style={{ fontFamily: titleFont }} className="text-primary text-2xl uppercase tracking-wide font-bold">
-                  Cinematic Ad Films
-                </div>
-              </div>
             </div>
 
             <div className="space-y-3 p-4 bg-secondary/30 rounded-lg border border-border">
+              <div className="p-3 bg-background rounded border border-border mb-3 overflow-hidden">
+                <p className="text-xs text-muted-foreground mb-2">Live Preview</p>
+                <div style={{ fontFamily: descriptionFont }} className="text-foreground/90 text-sm leading-relaxed">
+                  {siteDesc || 'Director & Cinematographer crafting visual stories that move, inspire, and captivate.'}
+                </div>
+              </div>
               <div>
                 <Label>Description & Body Font</Label>
                 <Select value={descriptionFont} onValueChange={setDescriptionFont}>
@@ -192,15 +207,15 @@ const SiteSettings = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="p-3 bg-background rounded border border-border mt-2 overflow-hidden">
-                <p className="text-xs text-muted-foreground mb-2">Live Preview</p>
-                <div style={{ fontFamily: descriptionFont }} className="text-foreground/90 text-sm leading-relaxed">
-                  {siteDesc || 'Director & Cinematographer crafting visual stories that move, inspire, and captivate.'}
-                </div>
-              </div>
             </div>
 
             <div className="space-y-3 p-4 bg-secondary/30 rounded-lg border border-border">
+              <div className="p-3 bg-background rounded border border-border mb-3 overflow-hidden">
+                <p className="text-xs text-muted-foreground mb-2">Live Preview</p>
+                <div style={{ fontFamily: footerFont }} className="text-muted-foreground text-xs tracking-widest uppercase">
+                  © 2026 {siteName || 'TARUN KAPOOR'}
+                </div>
+              </div>
               <div>
                 <Label>Footer Font</Label>
                 <Select value={footerFont} onValueChange={setFooterFont}>
@@ -214,18 +229,17 @@ const SiteSettings = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="p-3 bg-background rounded border border-border mt-2 overflow-hidden">
-                <p className="text-xs text-muted-foreground mb-2">Live Preview</p>
-                <div style={{ fontFamily: footerFont }} className="text-muted-foreground text-xs tracking-widest uppercase">
-                  © 2026 {siteName || 'TARUN KAPOOR'}
-                </div>
-              </div>
             </div>
           </div>
 
-          <Button onClick={handleSaveSettings} disabled={!settingsChanged} className="gap-2">
-            <Save className="w-4 h-4" /> Save Settings
-          </Button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button onClick={handleSaveSettings} disabled={!settingsChanged} className="gap-2">
+              <Save className="w-4 h-4" /> Save Settings
+            </Button>
+            <Button onClick={handleResetFonts} variant="outline" className="gap-2">
+              <RotateCcw className="w-4 h-4" /> Reset Fonts
+            </Button>
+          </div>
         </div>
 
         <Separator />

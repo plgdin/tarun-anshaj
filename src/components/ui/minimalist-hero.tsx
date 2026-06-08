@@ -146,13 +146,13 @@ export const MinimalistHero = ({
       `}} />
 
       {/* Sticky Header with Backdrop Blur */}
-      <header className="fixed top-0 left-0 right-0 z-40 w-full flex justify-center border-b border-foreground/5 bg-background/50 backdrop-blur-md px-6 py-4 sm:px-8 md:px-12">
+      <header className="fixed top-0 left-0 right-0 z-40 w-full flex justify-center border-b border-foreground/5 bg-background/50 backdrop-blur-md px-6 py-4 sm:px-8 md:px-12 font-header">
         <div className="flex w-full max-w-7xl items-center justify-between">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-2xl md:text-3xl tracking-tight font-montserrat"
+            className="text-2xl md:text-3xl tracking-tight"
           >
             {(() => {
               const parts = logoText.split(' ');
@@ -330,7 +330,7 @@ export const MinimalistHero = ({
       </div>
 
       {/* Footer Elements */}
-      <footer className="z-30 flex w-full max-w-7xl items-center justify-between mt-8 md:mt-0">
+      <footer className="z-30 flex w-full max-w-7xl items-center justify-between mt-8 md:mt-0 font-footer">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
