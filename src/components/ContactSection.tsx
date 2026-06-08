@@ -7,13 +7,19 @@ export const ContactSection: React.FC = () => {
   const { data } = useCms();
   const { siteSettings } = data;
 
-  const instaHandle = siteSettings.instagramUrl ? siteSettings.instagramUrl.split('/').pop() : 'tarun_kapoor10';
+  const socialLinks = [];
 
-  const socialLinks = [
-    { name: 'Email', icon: Mail, url: siteSettings.email ? `mailto:${siteSettings.email}` : 'mailto:contact@tarunkapoor.com', handle: siteSettings.email || 'contact@tarunkapoor.com' },
-    { name: 'LinkedIn', icon: Linkedin, url: siteSettings.linkedinUrl || 'https://linkedin.com', handle: siteSettings.siteName || 'Tarun Kapoor' },
-    { name: 'Instagram', icon: Instagram, url: siteSettings.instagramUrl || 'https://instagram.com/tarun_kapoor10', handle: `@${instaHandle}` },
-  ];
+  if (siteSettings.email) socialLinks.push({ name: 'Email', icon: Mail, url: `mailto:${siteSettings.email}`, handle: siteSettings.email });
+  else socialLinks.push({ name: 'Email', icon: Mail, url: 'mailto:tarun@3dcreator.com', handle: 'tarun@3dcreator.com' });
+
+  if (siteSettings.linkedinUrl) socialLinks.push({ name: 'LinkedIn', icon: Linkedin, url: siteSettings.linkedinUrl, handle: siteSettings.siteName || 'Tarun Kapoor' });
+  else socialLinks.push({ name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com', handle: 'TARUN KAPOOR' });
+
+  if (siteSettings.instagramUrl) socialLinks.push({ name: 'Instagram', icon: Instagram, url: siteSettings.instagramUrl, handle: `@${siteSettings.instagramUrl.split('/').pop()}` });
+  else socialLinks.push({ name: 'Instagram', icon: Instagram, url: 'https://instagram.com/tarun_kapoor10', handle: '@tarun_kapoor10' });
+
+  if (siteSettings.youtubeUrl) socialLinks.push({ name: 'YouTube', icon: Youtube, url: siteSettings.youtubeUrl, handle: siteSettings.youtubeUrl.split('/').pop() || 'YouTube' });
+  if (siteSettings.behanceUrl) socialLinks.push({ name: 'Behance', icon: Globe, url: siteSettings.behanceUrl, handle: siteSettings.behanceUrl.split('/').pop() || 'Behance' });
 
   return (
     <section
@@ -33,13 +39,13 @@ export const ContactSection: React.FC = () => {
 
         {/* Subtitle */}
         <FadeIn delay={0.15} y={20} className="z-10 max-w-lg mb-12 sm:mb-16">
-          <p className="text-textLight/70 font-light tracking-wide text-sm sm:text-base md:text-lg leading-relaxed uppercase">
-            Driven by crafting striking and unforgettable cinematic experiences. Let's talk about your next vision.
+          <p className="text-textLight/70 font-light tracking-wide text-sm sm:text-base md:text-lg leading-relaxed uppercase whitespace-pre-wrap">
+            {data.footerContent.description || "Driven by crafting striking and unforgettable cinematic experiences. Let's talk about your next vision."}
           </p>
         </FadeIn>
 
-        {/* Socials Grid - Balanced 3-column layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl z-10 mb-20">
+        {/* Socials Grid - Dynamic Layout */}
+        <div className="flex flex-wrap justify-center gap-4 w-full max-w-5xl z-10 mb-20">
           {socialLinks.map((social, index) => {
             const Icon = social.icon;
             return (
@@ -47,7 +53,7 @@ export const ContactSection: React.FC = () => {
                 key={social.name}
                 delay={0.2 + index * 0.08}
                 y={20}
-                className="w-full"
+                className="w-full sm:w-auto sm:flex-1 min-w-[260px] max-w-[350px]"
               >
                 <a
                   href={social.url}
@@ -80,7 +86,7 @@ export const ContactSection: React.FC = () => {
 
         {/* Footer info */}
         <FadeIn delay={0.5} y={10} className="z-10 text-xs sm:text-sm text-[#D7E2EA]/40 uppercase tracking-widest mt-8">
-          <p>{data.footerContent.copyright.replace('{year}', new Date().getFullYear().toString()) || `© ${new Date().getFullYear()} ${siteSettings.siteName || "TARUN KAPOOR"}. ALL RIGHTS RESERVED.`}</p>
+          <p>{(data.footerContent.copyright || '').replace('{year}', new Date().getFullYear().toString()) || `© ${new Date().getFullYear()} ${siteSettings.siteName?.toUpperCase() || "TARUN KAPOOR"}. ALL RIGHTS RESERVED.`}</p>
         </FadeIn>
       </div>
     </section>

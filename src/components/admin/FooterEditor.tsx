@@ -15,6 +15,7 @@ const FooterEditor = () => {
     behanceUrl: data.siteSettings.behanceUrl,
     email: data.siteSettings.email,
     instagramUrl: data.siteSettings.instagramUrl,
+    linkedinUrl: data.siteSettings.linkedinUrl,
     youtubeUrl: data.siteSettings.youtubeUrl,
   });
 
@@ -24,6 +25,7 @@ const FooterEditor = () => {
       behanceUrl: data.siteSettings.behanceUrl,
       email: data.siteSettings.email,
       instagramUrl: data.siteSettings.instagramUrl,
+      linkedinUrl: data.siteSettings.linkedinUrl,
       youtubeUrl: data.siteSettings.youtubeUrl,
     });
   }, [data.footerContent, data.siteSettings]);
@@ -39,6 +41,7 @@ const FooterEditor = () => {
     social.behanceUrl !== data.siteSettings.behanceUrl ||
     social.email !== data.siteSettings.email ||
     social.instagramUrl !== data.siteSettings.instagramUrl ||
+    social.linkedinUrl !== data.siteSettings.linkedinUrl ||
     social.youtubeUrl !== data.siteSettings.youtubeUrl;
 
   return (
@@ -60,7 +63,6 @@ const FooterEditor = () => {
         <div>
           <Label>Copyright Text</Label>
           <Input value={footer.copyright} onChange={(e) => setFooter({ ...footer, copyright: e.target.value })} className="bg-secondary border-border mt-1" />
-          <p className="text-xs text-muted-foreground mt-1">Use {'{year}'} for the current year</p>
         </div>
         <div className="border-t border-border pt-4">
           <h3 className="text-sm font-semibold text-foreground mb-3">Social Links</h3>
@@ -68,6 +70,7 @@ const FooterEditor = () => {
             <div><Label>Behance URL</Label><Input value={social.behanceUrl} onChange={(e) => setSocial({ ...social, behanceUrl: e.target.value })} className="bg-secondary border-border mt-1" /></div>
             <div><Label>Email</Label><Input value={social.email} onChange={(e) => setSocial({ ...social, email: e.target.value })} className="bg-secondary border-border mt-1" /></div>
             <div><Label>Instagram URL</Label><Input value={social.instagramUrl} onChange={(e) => setSocial({ ...social, instagramUrl: e.target.value })} className="bg-secondary border-border mt-1" /></div>
+            <div><Label>LinkedIn URL</Label><Input value={social.linkedinUrl} onChange={(e) => setSocial({ ...social, linkedinUrl: e.target.value })} className="bg-secondary border-border mt-1" /></div>
             <div><Label>YouTube URL</Label><Input value={social.youtubeUrl} onChange={(e) => setSocial({ ...social, youtubeUrl: e.target.value })} className="bg-secondary border-border mt-1" /></div>
           </div>
         </div>

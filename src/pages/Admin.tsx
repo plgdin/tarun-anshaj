@@ -1,4 +1,4 @@
-import { LogOut, Film, FolderOpen, Sparkles, FileText, Settings, Undo2, ArrowLeft, ExternalLink, Presentation } from 'lucide-react';
+import { LogOut, Film, FolderOpen, Sparkles, FileText, Settings, Undo2, ArrowLeft, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCms } from '@/context/CmsContext';
@@ -8,7 +8,6 @@ import CategoryManager from '@/components/admin/CategoryManager';
 import HeroEditor from '@/components/admin/HeroEditor';
 import FooterEditor from '@/components/admin/FooterEditor';
 import SiteSettings from '@/components/admin/SiteSettings';
-import PitchDeckEditor from '@/components/admin/PitchDeckEditor';
 import AboutEditor from '@/components/admin/AboutEditor';
 import MarqueeEditor from '@/components/admin/MarqueeEditor';
 import { useNavigate } from 'react-router-dom';
@@ -108,9 +107,6 @@ const Admin = () => {
             <TabsTrigger value="hero" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Sparkles className="w-4 h-4" /> <span className="hidden sm:inline">Hero</span>
             </TabsTrigger>
-            <TabsTrigger value="pitchdecks" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Presentation className="w-4 h-4" /> <span className="hidden sm:inline">Pitch Decks</span>
-            </TabsTrigger>
             <TabsTrigger value="marquee" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Film className="w-4 h-4" /> <span className="hidden sm:inline">Marquee</span>
             </TabsTrigger>
@@ -129,7 +125,6 @@ const Admin = () => {
           <TabsContent value="categories"><CategoryManager /></TabsContent>
           <TabsContent value="hero"><HeroEditor /></TabsContent>
           <TabsContent value="marquee"><MarqueeEditor /></TabsContent>
-          <TabsContent value="pitchdecks"><PitchDeckEditor /></TabsContent>
           <TabsContent value="about"><AboutEditor /></TabsContent>
           <TabsContent value="footer"><FooterEditor /></TabsContent>
           <TabsContent value="settings"><SiteSettings /></TabsContent>
