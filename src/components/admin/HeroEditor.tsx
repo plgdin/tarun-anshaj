@@ -79,11 +79,37 @@ const HeroEditor = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
 
-        {/* Slideshow */}
+        {/* Text Content */}
+        <div className="lg:col-span-12 w-full max-w-3xl space-y-4 pt-6">
+          <h3 className="text-sm font-semibold text-foreground mb-3">Hero Text Content</h3>
+          
+          <div>
+            <Label>Top Badge Text</Label>
+            <Input value={form.badge} onChange={(e) => updateField('badge', e.target.value)} className="bg-secondary border-border mt-1" placeholder="Director / Actor / Writer" />
+          </div>
+
+          <div>
+            <Label>Main Paragraph</Label>
+            <Textarea value={form.description} onChange={(e) => updateField('description', e.target.value)} className="bg-secondary border-border mt-1 h-24" placeholder="A director, actor, and writer driven by compelling storytelling..." />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Main Title (Line 1)</Label>
+              <Input value={form.ctaPrimaryText} onChange={(e) => updateField('ctaPrimaryText', e.target.value)} className="bg-secondary border-border mt-1" placeholder="hi, i'm" />
+            </div>
+            <div>
+              <Label>Main Title (Line 2)</Label>
+              <Input value={form.ctaSecondaryText} onChange={(e) => updateField('ctaSecondaryText', e.target.value)} className="bg-secondary border-border mt-1" placeholder="tarun." />
+            </div>
+          </div>
+        </div>
+
+        {/* Showreel Video Selection */}
         <div className="lg:col-span-12 w-full max-w-3xl pt-6 lg:pt-0">
-          <h3 className="text-sm font-semibold text-foreground mb-3">Hero Slideshow Videos</h3>
+          <h3 className="text-sm font-semibold text-foreground mb-3">Showreel Video</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            Select the videos you want to feature in the hero slider and drag them to reorder.
+            Select the primary video you want to play when scrolling down to the Showreel section.
           </p>
           
           <div className="space-y-3 mb-4">
@@ -129,7 +155,7 @@ const HeroEditor = () => {
             })}
             
             {(form.slideshowVideos || []).length === 0 && (
-              <p className="text-sm text-muted-foreground italic py-2">No videos selected for slideshow yet.</p>
+              <p className="text-sm text-muted-foreground italic py-2">No video selected for the Showreel yet.</p>
             )}
           </div>
 
@@ -140,7 +166,7 @@ const HeroEditor = () => {
               }
             }}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Add a video to slideshow..." />
+                <SelectValue placeholder="Select a video to feature..." />
               </SelectTrigger>
               <SelectContent>
                 {data.videos

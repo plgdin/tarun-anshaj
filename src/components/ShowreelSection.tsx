@@ -7,6 +7,10 @@ export const ShowreelSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
+  const featuredVideoId = data.heroContent.slideshowVideos?.[0];
+  const featuredVideo = data.videos.find((v) => v.id === featuredVideoId);
+  const showreelVideoUrl = featuredVideo?.videoUrl || data.heroContent.featuredVideoUrl || "/6.mp4";
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -72,7 +76,7 @@ export const ShowreelSection: React.FC = () => {
             >
               {/* Cinematic Video */}
               <video 
-                src={data.heroContent.featuredVideoUrl || "/6.mp4"}
+                src={showreelVideoUrl}
                 autoPlay
                 loop
                 muted
