@@ -1,10 +1,6 @@
 import crypto from 'crypto';
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -24,15 +20,22 @@ export default async function handler(
 
   const token = authHeader.replace('Bearer ', '');
   
-  // Dynamically initialize verification client
-  const { createClient } = await import('@supabase/supabase-js');
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL || '',
-    process.env.VITE_SUPABASE_ANON_KEY || ''
-  );
+  const supabaseUrl = process.env.VITE_SUPABASE_URL;
+  const anonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
-  const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-  if (authError || !user) {
+  if (!supabaseUrl || !anonKey) {
+    return res.status(500).json({ error: 'Missing Supabase environment variables' });
+  }
+
+  // Validate session directly via Supabase Auth REST API to avoid @vercel/node bundling crashes
+  const authResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'apikey': anonKey
+    }
+  });
+
+  if (!authResponse.ok) {
     return res.status(401).json({ error: 'Unauthorized: Invalid user session' });
   }
 

@@ -38,6 +38,14 @@ export const ShowreelSection: React.FC = () => {
   const cardY = useTransform(smoothProgress, [0.05, 0.85, 1.0], ["45vh", "0vh", "0vh"]);
   const cardBorderRadius = isMobile ? 24 : 40;
 
+  const selectedVideoId = data.heroContent.slideshowVideos?.[0];
+  const selectedVideo = selectedVideoId ? data.videos.find(v => v.id === selectedVideoId) : null;
+  const videoUrl = selectedVideo?.videoUrl;
+
+  if (!videoUrl) {
+    return null;
+  }
+
   return (
     <div ref={containerRef} className="hero-scroll-wrapper relative z-10" id="showreel">
       <div className="hero-sticky-container">
@@ -72,7 +80,7 @@ export const ShowreelSection: React.FC = () => {
             >
               {/* Cinematic Video */}
               <video 
-                src={data.heroContent.featuredVideoUrl || "/6.mp4"}
+                src={videoUrl}
                 autoPlay
                 loop
                 muted
