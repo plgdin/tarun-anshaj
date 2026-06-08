@@ -10,7 +10,7 @@ export const ContactSection: React.FC = () => {
   const instaHandle = siteSettings.instagramUrl ? siteSettings.instagramUrl.split('/').pop() : 'tarun_kapoor10';
 
   const socialLinks = [
-    { name: 'Email', icon: Mail, url: siteSettings.email ? `mailto:${siteSettings.email}` : 'mailto:tarun@3dcreator.com', handle: siteSettings.email || 'tarun@3dcreator.com' },
+    { name: 'Email', icon: Mail, url: siteSettings.email ? `mailto:${siteSettings.email}` : 'mailto:contact@tarunkapoor.com', handle: siteSettings.email || 'contact@tarunkapoor.com' },
     { name: 'LinkedIn', icon: Linkedin, url: siteSettings.linkedinUrl || 'https://linkedin.com', handle: siteSettings.siteName || 'Tarun Kapoor' },
     { name: 'Instagram', icon: Instagram, url: siteSettings.instagramUrl || 'https://instagram.com/tarun_kapoor10', handle: `@${instaHandle}` },
   ];
@@ -34,12 +34,12 @@ export const ContactSection: React.FC = () => {
         {/* Subtitle */}
         <FadeIn delay={0.15} y={20} className="z-10 max-w-lg mb-12 sm:mb-16">
           <p className="text-textLight/70 font-light tracking-wide text-sm sm:text-base md:text-lg leading-relaxed uppercase">
-            driven by crafting striking and unforgettable projects. Let&apos;s talk about your next vision.
+            Driven by crafting striking and unforgettable cinematic experiences. Let's talk about your next vision.
           </p>
         </FadeIn>
 
-        {/* Socials Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl z-10 mb-20">
+        {/* Socials Grid - Balanced 3-column layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl z-10 mb-20">
           {socialLinks.map((social, index) => {
             const Icon = social.icon;
             return (
@@ -86,3 +86,4 @@ export const ContactSection: React.FC = () => {
     </section>
   );
 };
+
