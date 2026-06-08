@@ -76,10 +76,75 @@ export const MinimalistHero = ({
   return (
     <div
       className={cn(
-        'relative flex min-h-screen w-full flex-col items-center justify-between overflow-hidden bg-background p-4 sm:p-8 font-sans md:p-12 pt-24 md:pt-32',
+        'minimalist-hero-root relative flex min-h-screen w-full flex-col items-center justify-between overflow-hidden bg-background p-4 sm:p-8 font-sans md:p-12 pt-24 md:pt-32',
         className
       )}
     >
+      <style dangerouslySetInnerHTML={{ __html: `
+        .minimalist-hero-root {
+          --circle-size: 190px;
+          --title-font-size: 2.25rem;
+        }
+        @media (min-width: 640px) {
+          .minimalist-hero-root {
+            --circle-size: 240px;
+            --title-font-size: 3.5rem;
+          }
+        }
+        @media (min-width: 768px) {
+          .minimalist-hero-root {
+            --circle-size: 260px;
+            --title-font-size: 4.25rem;
+          }
+        }
+        @media (min-width: 1024px) {
+          .minimalist-hero-root {
+            --circle-size: 320px;
+            --title-font-size: 5.25rem;
+          }
+        }
+        @media (min-width: 1280px) {
+          .minimalist-hero-root {
+            --circle-size: 400px;
+            --title-font-size: 6.75rem;
+          }
+        }
+        @media (min-width: 1536px) {
+          .minimalist-hero-root {
+            --circle-size: 450px;
+            --title-font-size: 8rem;
+          }
+        }
+        
+        /* Height adjustments on desktop to prevent vertical overflow of the circle */
+        @media (min-width: 768px) and (max-height: 950px) {
+          .minimalist-hero-root {
+            --circle-size: clamp(260px, 42vh, 400px);
+            padding-top: 5.5rem !important;
+            padding-bottom: 2.5rem !important;
+          }
+        }
+        @media (min-width: 768px) and (max-height: 800px) {
+          .minimalist-hero-root {
+            --circle-size: clamp(240px, 46vh, 350px);
+            padding-top: 5rem !important;
+            padding-bottom: 2rem !important;
+          }
+        }
+        @media (min-width: 768px) and (max-height: 680px) {
+          .minimalist-hero-root {
+            --circle-size: clamp(220px, 48vh, 300px);
+            padding-top: 4.5rem !important;
+            padding-bottom: 1.5rem !important;
+          }
+        }
+        @media (min-width: 768px) {
+          .hero-grid-layout {
+            grid-template-columns: minmax(0, 1fr) var(--circle-size) minmax(0, 1fr) !important;
+          }
+        }
+      `}} />
+
       {/* Sticky Header with Backdrop Blur */}
       <header className="fixed top-0 left-0 right-0 z-40 w-full flex justify-center border-b border-foreground/5 bg-background/50 backdrop-blur-md px-6 py-4 sm:px-8 md:px-12">
         <div className="flex w-full max-w-7xl items-center justify-between">
@@ -165,7 +230,7 @@ export const MinimalistHero = ({
       </AnimatePresence>
 
       {/* Main Content Area - Grid Column Order Optimized for Responsiveness */}
-      <div className="relative grid w-full max-w-7xl flex-grow grid-cols-1 items-center md:grid-cols-[1fr_1.5fr_1fr] gap-y-8 sm:gap-y-10 md:gap-x-8 lg:gap-x-16 xl:gap-x-24 py-8 md:py-0">
+      <div className="hero-grid-layout relative grid w-full max-w-7xl mx-auto flex-grow grid-cols-1 items-center gap-y-8 sm:gap-y-10 md:gap-x-6 lg:gap-x-8 xl:gap-x-12 py-8 md:py-0">
         
         {/* Left Text Content - Displays last on mobile (order-3), first on desktop (md:order-1) */}
         <motion.div
@@ -174,15 +239,21 @@ export const MinimalistHero = ({
           transition={{ duration: 0.6, delay: 1 }}
           className="z-20 order-3 md:order-1 text-center md:text-left px-4 md:px-0"
         >
-          <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">{mainText}</p>
-          <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-foreground underline decoration-from-font">
+          <p className="mx-auto max-w-sm md:max-w-md text-base lg:text-lg xl:text-xl leading-relaxed text-foreground/80 md:mx-0">{mainText}</p>
+          <a href={readMoreLink} className="mt-4 inline-block text-sm md:text-base font-medium text-foreground underline decoration-from-font">
             Read More
           </a>
         </motion.div>
 
         {/* Center Image with Circle - Displays middle on mobile (order-2), middle on desktop (md:order-2) */}
         <div className="relative order-2 md:order-2 flex justify-center items-center h-full w-full py-2 md:py-0">
-          <div className="relative flex items-end justify-center w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] md:w-[300px] md:h-[300px] lg:w-[380px] lg:h-[380px] xl:w-[420px] xl:h-[420px] 2xl:w-[480px] 2xl:h-[480px]">
+          <div
+            style={{
+              width: 'var(--circle-size)',
+              height: 'var(--circle-size)',
+            }}
+            className="relative flex items-end justify-center"
+          >
 
             {/* Yellow Circle Backdrop */}
             <motion.div
@@ -197,7 +268,11 @@ export const MinimalistHero = ({
               <motion.img
                 src={imageSrc}
                 alt={imageAlt}
-                className="relative z-10 w-32 h-[140px] sm:w-36 sm:h-[170px] md:w-44 md:h-[220px] lg:w-52 lg:h-[280px] xl:w-56 xl:h-[300px] 2xl:w-64 2xl:h-[350px] object-cover object-top origin-bottom"
+                style={{
+                  width: 'calc(var(--circle-size) * 0.54)',
+                  height: 'calc(var(--circle-size) * 0.73)',
+                }}
+                className="relative z-10 object-cover object-top origin-bottom"
                 initial={{ opacity: 0, y: 50, scale }}
                 animate={{ opacity: 1, y: 0, scale }}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
@@ -214,10 +289,12 @@ export const MinimalistHero = ({
               <motion.img
                 src={imageSrc}
                 alt={imageAlt}
-                className="relative z-20 w-32 h-[140px] sm:w-36 sm:h-[170px] md:w-44 md:h-[220px] lg:w-52 lg:h-[280px] xl:w-56 xl:h-[300px] 2xl:w-64 2xl:h-[350px] object-cover object-top origin-bottom"
                 style={{
+                  width: 'calc(var(--circle-size) * 0.54)',
+                  height: 'calc(var(--circle-size) * 0.73)',
                   clipPath: 'inset(0% 0% 30% 0%)'
                 }}
+                className="relative z-20 object-cover object-top origin-bottom"
                 initial={{ opacity: 0, y: 50, scale }}
                 animate={{ opacity: 1, y: 0, scale }}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
@@ -237,9 +314,14 @@ export const MinimalistHero = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.2 }}
-          className="z-20 order-1 md:order-3 flex items-center justify-center text-center md:justify-start"
+          className="z-20 order-1 md:order-3 flex items-center justify-center text-center md:justify-start md:pl-4 lg:pl-6 xl:pl-10"
         >
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-foreground font-montserrat tracking-tight leading-none uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]">
+          <h1
+            style={{
+              fontSize: 'var(--title-font-size)',
+            }}
+            className="text-foreground font-montserrat tracking-tight leading-none uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+          >
             <span className="font-extralight text-foreground/75">{overlayText.part1}</span>
             <br />
             <span className="font-black text-foreground">{overlayText.part2}</span>
