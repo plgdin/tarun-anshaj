@@ -9,8 +9,11 @@ import { ContactSection } from './components/ContactSection';
 import Admin from './pages/Admin';
 import { CmsProvider } from './context/CmsContext';
 import { Toaster } from 'sonner';
+import { useCms } from './context/CmsContext';
 
 function Frontend() {
+  const { isLoading, data } = useCms();
+
   // Enable smooth scroll behavior on HTML anchor clicks
   useEffect(() => {
     const handleAnchorClick = (e: MouseEvent) => {
@@ -36,7 +39,14 @@ function Frontend() {
         link.removeEventListener('click', handleAnchorClick as any);
       });
     };
-  }, []);
+  }, [isLoading]);
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-darkBg" />;
+  }
+
+  const selectedVideoId = data.heroContent.slideshowVideos?.[0];
+  const hasShowreelVideo = !!selectedVideoId;
 
   return (
     <div className="bg-darkBg text-textLight min-h-screen w-full overflow-x-clip">
@@ -50,7 +60,7 @@ function Frontend() {
       <AboutSection />
 
       {/* 4. Showreel Section */}
-      <ShowreelSection />
+      {hasShowreelVideo && <ShowreelSection />}
 
       {/* 5. Projects Section */}
       <ProjectsSection />

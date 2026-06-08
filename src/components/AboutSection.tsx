@@ -88,7 +88,8 @@ export const AboutSection: React.FC = () => {
 
         {/* Animated paragraph with filmmaker focus */}
         <AnimatedText
-          text={data.aboutContent.description1 || "As a director, actor, and screenwriter, I focus on crafting rich visual narratives, compelling character development, and unforgettable cinematic journeys. I truly enjoy collaborating on projects that challenge boundaries and tell deep human truths. Let's create something extraordinary together!"}
+          key={data.aboutContent.aboutDescription || "fallback"}
+          text={data.aboutContent.aboutDescription || "As a director, actor, and screenwriter, I focus on crafting rich visual narratives, compelling character development, and unforgettable cinematic journeys. I truly enjoy collaborating on projects that challenge boundaries and tell deep human truths. Let's create something extraordinary together!"}
           className="text-textLight font-medium text-center leading-relaxed max-w-[640px] text-[clamp(0.95rem,2vw,1.3rem)]"
         />
       </div>

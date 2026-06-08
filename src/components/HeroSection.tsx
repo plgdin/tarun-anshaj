@@ -5,7 +5,7 @@ import { useCms } from '@/context/CmsContext';
 
 export const HeroSection = () => {
   const { data } = useCms();
-  const { siteSettings } = data;
+  const { siteSettings, aboutContent } = data;
 
   const navLinks = [
     { label: 'ABOUT', href: '#about' },
@@ -22,7 +22,7 @@ export const HeroSection = () => {
     <MinimalistHero
       logoText={siteSettings.siteName || "Tarun Kapoor"}
       navLinks={navLinks}
-      mainText="A director, actor, and writer driven by compelling storytelling, rich character development, and cinematic experiences. Crafting narratives that evoke raw emotion and capture human truth."
+      mainText={aboutContent?.heroDescription || "A director, actor, and writer driven by compelling storytelling, rich character development, and cinematic experiences. Crafting narratives that evoke raw emotion and capture human truth."}
       readMoreLink="#about"
       imageSrc="/tarun-hero.png"
       imageAlt="Tarun Kapoor — Director, Actor & Writer portrait"

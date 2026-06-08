@@ -46,23 +46,8 @@ export interface FooterContent {
 }
 
 export interface AboutContent {
-  section1Image: string;
-  name: string;
-  title1: string;
-  description1: string;
-  location: string;
-  availability: string;
-
-  section2Image: string;
-  title2: string;
-  description2a: string;
-  description2b: string;
-
-  section3Image: string;
-  title3: string;
-  description3: string;
-  quote: string;
-  quoteAuthor: string;
+  heroDescription: string;
+  aboutDescription: string;
 }
 
 export interface CmsData {

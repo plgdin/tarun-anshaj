@@ -40,9 +40,7 @@ export const ShowreelSection: React.FC = () => {
 
   const selectedVideoId = data.heroContent.slideshowVideos?.[0];
   const selectedVideo = selectedVideoId ? data.videos.find(v => v.id === selectedVideoId) : null;
-  const videoUrl = selectedVideo?.videoUrl;
-
-  if (!videoUrl) return null;
+  const videoUrl = selectedVideo?.videoUrl || "/6.mp4";
 
   return (
     <div ref={containerRef} className="hero-scroll-wrapper relative z-10" id="showreel">
