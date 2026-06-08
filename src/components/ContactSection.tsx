@@ -4,7 +4,7 @@ import { Mail, Linkedin, Instagram, ArrowUpRight } from 'lucide-react';
 
 export const ContactSection: React.FC = () => {
   const socialLinks = [
-    { name: 'Email', icon: Mail, url: 'mailto:tarun@3dcreator.com', handle: 'tarun@3dcreator.com' },
+    { name: 'Email', icon: Mail, url: 'mailto:contact@tarunkapoor.com', handle: 'contact@tarunkapoor.com' },
     { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com', handle: 'Tarun Kapoor' },
     { name: 'Instagram', icon: Instagram, url: 'https://instagram.com/tarun_kapoor10', handle: '@tarun_kapoor10' },
   ];
@@ -28,12 +28,12 @@ export const ContactSection: React.FC = () => {
         {/* Subtitle */}
         <FadeIn delay={0.15} y={20} className="z-10 max-w-lg mb-12 sm:mb-16">
           <p className="text-textLight/70 font-light tracking-wide text-sm sm:text-base md:text-lg leading-relaxed uppercase">
-            driven by crafting striking and unforgettable projects. Let&apos;s talk about your next vision.
+            Driven by crafting striking and unforgettable cinematic experiences. Let's talk about your next vision.
           </p>
         </FadeIn>
 
-        {/* Socials Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl z-10 mb-20">
+        {/* Socials Grid - Balanced 3-column layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl z-10 mb-20">
           {socialLinks.map((social, index) => {
             const Icon = social.icon;
             return (
@@ -80,3 +80,4 @@ export const ContactSection: React.FC = () => {
     </section>
   );
 };
+

@@ -10,7 +10,7 @@ const navLinks = [
 const socialLinks = [
   { icon: Instagram, href: 'https://instagram.com/tarun_kapoor10' },
   { icon: Linkedin, href: 'https://linkedin.com' },
-  { icon: Mail, href: 'mailto:tarun@3dcreator.com' },
+  { icon: Mail, href: 'mailto:contact@tarunkapoor.com' },
 ];
 
 export const HeroSection = () => {
