@@ -1,28 +1,17 @@
 import React, { useRef, useState, useEffect } from 'react';
-
-const row1Images = [
-  'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600&auto=format&fit=crop&q=80',
-];
-
-const row2Images = [
-  'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1503095391755-111c1867e997?w=600&auto=format&fit=crop&q=80',
-];
-
-// Tripled lists for seamless scrolling illusion
-const row1Tripled = [...row1Images, ...row1Images, ...row1Images];
-const row2Tripled = [...row2Images, ...row2Images, ...row2Images];
+import { useCms } from '@/context/CmsContext';
 
 export const MarqueeSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState(0);
+  const { data } = useCms();
+
+  const row1Images = data.heroContent?.marqueeRow1 || [];
+  const row2Images = data.heroContent?.marqueeRow2 || [];
+
+  // Tripled lists for seamless scrolling illusion
+  const row1Tripled = [...row1Images, ...row1Images, ...row1Images];
+  const row2Tripled = [...row2Images, ...row2Images, ...row2Images];
 
   useEffect(() => {
     const handleScroll = () => {

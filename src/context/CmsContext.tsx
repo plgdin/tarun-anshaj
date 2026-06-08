@@ -40,6 +40,20 @@ const getDefaultData = (): CmsData => ({
     featuredVideoThumbnail: defaultFeaturedVideo.thumbnail,
     backgroundImage: '',
     slideshowVideos: [],
+    marqueeRow1: [
+      'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600&auto=format&fit=crop&q=80',
+    ],
+    marqueeRow2: [
+      'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1503095391755-111c1867e997?w=600&auto=format&fit=crop&q=80',
+    ],
   },
   aboutContent: {
     section1Image: '',
@@ -343,7 +357,13 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     return {
       siteSettings: settings?.site_settings || defaultData.siteSettings,
-      heroContent: settings?.hero_content ? { ...defaultData.heroContent, ...settings.hero_content, slideshowVideos: settings.hero_content.slideshowVideos || [] } : defaultData.heroContent,
+      heroContent: settings?.hero_content ? { 
+        ...defaultData.heroContent, 
+        ...settings.hero_content, 
+        slideshowVideos: settings.hero_content.slideshowVideos || [],
+        marqueeRow1: settings.hero_content.marqueeRow1 || defaultData.heroContent.marqueeRow1,
+        marqueeRow2: settings.hero_content.marqueeRow2 || defaultData.heroContent.marqueeRow2
+      } : defaultData.heroContent,
       aboutContent: settings?.about_content || defaultData.aboutContent,
       footerContent: settings?.footer_content || defaultData.footerContent,
       categories: (categories || []).map(c => ({ id: c.id, title: c.title, slug: c.slug })),

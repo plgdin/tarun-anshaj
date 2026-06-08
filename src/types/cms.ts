@@ -36,6 +36,8 @@ export interface HeroContent {
   featuredVideoThumbnail: string;
   backgroundImage: string;
   slideshowVideos: string[];
+  marqueeRow1: string[];
+  marqueeRow2: string[];
 }
 
 export interface FooterContent {

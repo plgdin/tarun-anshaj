@@ -134,7 +134,7 @@ const HeroEditor = () => {
           </div>
 
           <div>
-            <Select onValueChange={(val) => {
+            <Select key={(form.slideshowVideos || []).join(',')} onValueChange={(val) => {
               if (val) {
                 handleAddSlideshowVideo(val);
               }
