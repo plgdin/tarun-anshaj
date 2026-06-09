@@ -97,12 +97,22 @@ const MarqueeEditor = () => {
           <div key={`${row}-${idx}`} className="flex items-center gap-3 bg-secondary/50 p-3 rounded-md border border-border">
             <div className="flex-1 min-w-0 flex items-center gap-2">
                {(() => {
-                 const matchedVideo = data.videos.find(v => v.thumbnail === url);
-                 return matchedVideo ? (
-                   <span className="text-xs font-medium text-muted-foreground whitespace-nowrap shrink-0">
-                     [{matchedVideo.title}]
-                   </span>
-                 ) : null;
+                 const matchedVideo = data.videos.find(v => v.thumbnail === url || v.id === url);
+                 const matchedPitch = data.pitchDecks?.find(p => p.thumbnail === url || p.id === url);
+                 if (matchedVideo) {
+                   return (
+                     <span className="text-xs font-medium text-muted-foreground whitespace-nowrap shrink-0">
+                       [{matchedVideo.title}]
+                     </span>
+                   );
+                 } else if (matchedPitch) {
+                   return (
+                     <span className="text-xs font-medium text-muted-foreground whitespace-nowrap shrink-0">
+                       [{matchedPitch.title} (Pitch Deck)]
+                     </span>
+                   );
+                 }
+                 return null;
                })()}
                <Input
                  value={url}
@@ -164,34 +174,42 @@ const MarqueeEditor = () => {
         <Select key={urls.join(',')} onValueChange={(val) => {
           if (val) {
             const video = data.videos.find(v => v.id === val);
-            if (video && video.thumbnail) {
+            const pitch = data.pitchDecks?.find(p => p.id === val);
+            const item = video || pitch;
+            if (item) {
+              const valueToAdd = item.thumbnail || item.id;
               const currentUrls = form[row === 1 ? 'marqueeRow1' : 'marqueeRow2'] || [];
-              if (currentUrls.includes(video.thumbnail)) {
-                toast.error('This video is already added to the row');
+              if (currentUrls.includes(valueToAdd)) {
+                toast.error('This item is already added to the row');
                 return;
               }
               setForm((prev) => ({
                 ...prev,
                 [row === 1 ? 'marqueeRow1' : 'marqueeRow2']: [
                   ...currentUrls,
-                  video.thumbnail,
+                  valueToAdd,
                 ],
               }));
-              toast.success(`Added thumbnail for ${video.title}`);
-            } else if (video) {
-              toast.error('This video has no thumbnail');
+              toast.success(`Added ${item.title}`);
             }
           }
         }}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Or select an existing video to add its thumbnail..." />
+            <SelectValue placeholder="Or select an existing video or pitch deck to add its thumbnail..." />
           </SelectTrigger>
           <SelectContent>
             {data.videos
-              .filter(v => v.thumbnail && !urls.includes(v.thumbnail))
+              .filter(v => !v.thumbnail || !urls.includes(v.thumbnail))
               .map((v) => (
                 <SelectItem key={v.id} value={v.id}>
                   {v.title}
+                </SelectItem>
+              ))}
+            {(data.pitchDecks || [])
+              .filter(p => !p.thumbnail || !urls.includes(p.thumbnail))
+              .map((p) => (
+                <SelectItem key={p.id} value={p.id}>
+                  {p.title} (Pitch Deck)
                 </SelectItem>
               ))}
           </SelectContent>

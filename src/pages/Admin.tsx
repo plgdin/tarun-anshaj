@@ -10,6 +10,7 @@ import FooterEditor from '@/components/admin/FooterEditor';
 import SiteSettings from '@/components/admin/SiteSettings';
 import AboutEditor from '@/components/admin/AboutEditor';
 import MarqueeEditor from '@/components/admin/MarqueeEditor';
+import PitchDeckEditor from '@/components/admin/PitchDeckEditor';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -116,6 +117,9 @@ const Admin = () => {
             <TabsTrigger value="footer" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <FileText className="w-4 h-4" /> <span className="hidden sm:inline">Footer</span>
             </TabsTrigger>
+            <TabsTrigger value="pitch" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Film className="w-4 h-4" /> <span className="hidden sm:inline">Pitch Decks</span>
+            </TabsTrigger>
             <TabsTrigger value="settings" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Settings className="w-4 h-4" /> <span className="hidden sm:inline">Settings</span>
             </TabsTrigger>
@@ -127,6 +131,7 @@ const Admin = () => {
           <TabsContent value="marquee"><MarqueeEditor /></TabsContent>
           <TabsContent value="about"><AboutEditor /></TabsContent>
           <TabsContent value="footer"><FooterEditor /></TabsContent>
+          <TabsContent value="pitch"><PitchDeckEditor /></TabsContent>
           <TabsContent value="settings"><SiteSettings /></TabsContent>
         </Tabs>
       </main>

@@ -93,7 +93,7 @@ export const Card = ({
       }}
       className="max-w-7xl -mt-12 mx-auto h-[35rem] md:h-[50rem] w-full border-4 border-[#6C6C6C] p-2 md:p-6 bg-[#222222] rounded-[30px] shadow-2xl"
     >
-      <div className="h-full w-full overflow-x-hidden overflow-y-auto rounded-2xl bg-[#0c0c0c] md:rounded-2xl">
+      <div className="h-full w-full overflow-x-hidden overflow-y-auto rounded-2xl bg-[#0c0c0c] md:rounded-2xl custom-scrollbar">
         {children}
       </div>
     </motion.div>
