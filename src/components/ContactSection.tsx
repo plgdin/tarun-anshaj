@@ -32,7 +32,7 @@ export const ContactSection: React.FC = () => {
 
         {/* Heading */}
         <FadeIn delay={0} y={30} className="z-10">
-          <h2 className="hero-heading uppercase text-[clamp(2.5rem,10vw,120px)] leading-none mb-6">
+          <h2 className="hero-heading uppercase text-[clamp(2.5rem,10vw,120px)] max-md:text-[3.5rem] max-md:leading-[1.1] max-md:break-words leading-none mb-6">
             <span className="font-black">Get</span> <span className="font-extralight text-foreground/60">In Touch</span>
           </h2>
         </FadeIn>

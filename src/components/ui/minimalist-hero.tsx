@@ -330,7 +330,7 @@ export const MinimalistHero = ({
       </div>
 
       {/* Footer Elements */}
-      <footer className="z-30 flex w-full max-w-7xl items-center justify-between mt-8 md:mt-0 font-footer">
+      <footer className="z-30 flex w-full max-w-7xl items-center justify-between mt-8 max-md:pb-12 max-md:flex-col max-md:gap-4 max-md:mt-4 md:mt-0 font-footer">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
