@@ -38,7 +38,7 @@ export const ProjectsSection: React.FC = () => {
                     </div>
                 }
             >
-                <div className="h-full w-full bg-[#121212] text-white flex flex-col">
+                <div className="w-full bg-[#121212] text-white">
                     {/* Mock Window Header */}
                     <div className="portfolio-studio-header">
                         <div className="window-dots">
@@ -82,6 +82,11 @@ export const ProjectsSection: React.FC = () => {
                                     <img
                                         src={p.thumbnail || ''}
                                         alt={p.title}
+                                        onError={(e) => {
+                                            const target = e.target as HTMLImageElement;
+                                            target.onerror = null;
+                                            target.src = 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&auto=format&fit=crop&q=80';
+                                        }}
                                     />
                                     <div className="studio-play-overlay">
                                         <div className="studio-play-btn">
