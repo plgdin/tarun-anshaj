@@ -117,15 +117,6 @@ export const ProjectsSection: React.FC = () => {
                                                 </svg>
                                             </div>
                                         </div>
-                                        
-                                        <div className="studio-creator-badge">
-                                            <img src="/tarun-avatar.png" alt={deck.title} onError={(e) => {
-                                                const target = e.target as HTMLImageElement;
-                                                target.onerror = null;
-                                                target.src = 'https://placehold.co/40x40/eab308/ffffff?text=TK';
-                                            }} />
-                                            <span>{data.siteSettings.siteName || "Tarun Kapoor"}</span>
-                                        </div>
                                     </div>
                                     
                                     <div className="studio-item-info">
@@ -156,15 +147,6 @@ export const ProjectsSection: React.FC = () => {
                                                     <polygon points="5 3 19 12 5 21 5 3" />
                                                 </svg>
                                             </div>
-                                        </div>
-                                        
-                                        <div className="studio-creator-badge">
-                                            <img src="/tarun-avatar.png" alt={p.title} onError={(e) => {
-                                                const target = e.target as HTMLImageElement;
-                                                target.onerror = null;
-                                                target.src = 'https://placehold.co/40x40/eab308/ffffff?text=TK';
-                                            }} />
-                                            <span>{data.siteSettings.siteName || "Tarun Kapoor"}</span>
                                         </div>
                                     </div>
                                     

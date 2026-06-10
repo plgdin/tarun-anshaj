@@ -45,7 +45,7 @@ export const ContactSection: React.FC = () => {
         </FadeIn>
 
         {/* Socials Grid - Dynamic Layout */}
-        <div className="flex flex-wrap justify-center gap-4 w-full max-w-5xl z-10 mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl z-10 mb-20 mx-auto">
           {socialLinks.map((social, index) => {
             const Icon = social.icon;
             return (
@@ -53,13 +53,13 @@ export const ContactSection: React.FC = () => {
                 key={social.name}
                 delay={0.2 + index * 0.08}
                 y={20}
-                className="w-full sm:w-auto sm:flex-1 min-w-[260px] max-w-[350px]"
+                className="w-full"
               >
                 <a
                   href={social.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-between p-4 sm:p-5 rounded-2xl border border-[#D7E2EA]/10 bg-white/[0.02] hover:bg-white/[0.06] hover:border-[#D7E2EA]/30 transition-all duration-300 group"
+                  className="flex items-center justify-between p-4 sm:p-5 rounded-2xl border border-[#D7E2EA]/10 bg-white/[0.02] hover:bg-white/[0.06] hover:border-[#D7E2EA]/30 transition-all duration-300 w-full group"
                 >
                   <div className="flex items-center gap-4">
                     <div className="p-2 sm:p-3 rounded-xl bg-white/[0.04] text-textLight group-hover:text-[#B600A8] transition-colors">
@@ -85,8 +85,20 @@ export const ContactSection: React.FC = () => {
         </div>
 
         {/* Footer info */}
-        <FadeIn delay={0.5} y={10} className="z-10 text-xs sm:text-sm text-[#D7E2EA]/40 uppercase tracking-widest mt-8 font-footer">
+        <FadeIn delay={0.5} y={10} className="z-10 text-xs sm:text-sm text-[#D7E2EA]/40 uppercase tracking-widest mt-8 font-footer flex flex-col items-center gap-2 text-center">
           <p>{(data.footerContent.copyright || '').replace('{year}', new Date().getFullYear().toString()) || `© ${new Date().getFullYear()} ${siteSettings.siteName?.toUpperCase() || "TARUN KAPOOR"}. ALL RIGHTS RESERVED.`}</p>
+          <p className="normal-case text-[10px] sm:text-xs tracking-wider text-[#D7E2EA]/40 mt-1 font-sans">
+            Designed by{' '}
+            <a
+              href="https://plgdinn.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-textLight transition-colors"
+            >
+              PluggedIn
+            </a>{' '}
+            in collaboration with GodSpeed Enterprises
+          </p>
         </FadeIn>
       </div>
     </section>
