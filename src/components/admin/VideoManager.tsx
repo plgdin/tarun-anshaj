@@ -151,7 +151,7 @@ const VideoManager = () => {
           upload.start();
         });
         
-        const cdnHost = import.meta.env.VITE_BUNNY_CDN_HOSTNAME || 'vz-dadaa479-fe6.b-cdn.net';
+        const cdnHost = import.meta.env.VITE_BUNNY_CDN_HOSTNAME || 'vz-8dd5403f-611.b-cdn.net';
         finalVideoUrl = `https://${cdnHost}/${videoId}/play_720p.mp4`;
         const autoThumbnail = `https://${cdnHost}/${videoId}/thumbnail.jpg`;
         
