@@ -60,10 +60,7 @@ const FooterEditor = () => {
           <Label>Footer Description</Label>
           <Textarea value={footer.description} onChange={(e) => setFooter({ ...footer, description: e.target.value })} className="bg-secondary border-border mt-1" />
         </div>
-        <div>
-          <Label>Copyright Text</Label>
-          <Input value={footer.copyright} onChange={(e) => setFooter({ ...footer, copyright: e.target.value })} className="bg-secondary border-border mt-1" />
-        </div>
+
         <div className="border-t border-border pt-4">
           <h3 className="text-sm font-semibold text-foreground mb-3">Social Links</h3>
           <div className="grid gap-4">

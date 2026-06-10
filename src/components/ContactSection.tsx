@@ -86,7 +86,7 @@ export const ContactSection: React.FC = () => {
 
         {/* Footer info */}
         <FadeIn delay={0.5} y={10} className="z-10 text-xs sm:text-sm text-[#D7E2EA]/40 uppercase tracking-widest mt-8 font-footer flex flex-col items-center gap-2 text-center">
-          <p>{(data.footerContent.copyright || '').replace('{year}', new Date().getFullYear().toString()) || `© ${new Date().getFullYear()} ${siteSettings.siteName?.toUpperCase() || "TARUN KAPOOR"}. ALL RIGHTS RESERVED.`}</p>
+          <p>© 2026 Tarun Kapoor. All rights reserved.</p>
           <p className="normal-case text-[10px] sm:text-xs tracking-wider text-[#D7E2EA]/40 mt-1 font-sans">
             Designed by{' '}
             <a
