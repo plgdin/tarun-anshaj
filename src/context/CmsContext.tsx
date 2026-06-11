@@ -54,6 +54,12 @@ const getDefaultData = (): CmsData => ({
       'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1503095391755-111c1867e997?w=600&auto=format&fit=crop&q=80',
     ],
+    popOutHeroImage: true,
+    heroImageScale: 1.9,
+    heroImageXOffset: 0,
+    heroImageYOffset: 0,
+    circleColor: '#eab308',
+    showreelDuration: 10,
   },
   aboutContent: {
     heroDescription: "A director, writer, and storyteller driven by compelling storytelling, rich character development, and cinematic experiences. Crafting narratives that evoke raw emotion and capture human truth.",
@@ -347,9 +353,11 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       heroContent: settings?.hero_content ? { 
         ...defaultData.heroContent, 
         ...settings.hero_content, 
+        circleColor: settings.hero_content.circleColor || defaultData.heroContent.circleColor,
         slideshowVideos: settings.hero_content.slideshowVideos || [],
         marqueeRow1: settings.hero_content.marqueeRow1 || defaultData.heroContent.marqueeRow1,
-        marqueeRow2: settings.hero_content.marqueeRow2 || defaultData.heroContent.marqueeRow2
+        marqueeRow2: settings.hero_content.marqueeRow2 || defaultData.heroContent.marqueeRow2,
+        showreelDuration: settings.hero_content.showreelDuration !== undefined ? settings.hero_content.showreelDuration : defaultData.heroContent.showreelDuration,
       } : defaultData.heroContent,
       aboutContent: {
         heroDescription: settings?.about_content?.heroDescription || defaultData.aboutContent.heroDescription,

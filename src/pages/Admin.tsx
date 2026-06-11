@@ -1,4 +1,4 @@
-import { LogOut, Film, FolderOpen, Sparkles, FileText, Settings, Undo2, ArrowLeft, ExternalLink } from 'lucide-react';
+import { LogOut, Film, FolderOpen, Sparkles, Image, FileText, Settings, Undo2, ArrowLeft, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCms } from '@/context/CmsContext';
@@ -6,6 +6,7 @@ import AdminLogin from '@/components/admin/AdminLogin';
 import VideoManager from '@/components/admin/VideoManager';
 import CategoryManager from '@/components/admin/CategoryManager';
 import HeroEditor from '@/components/admin/HeroEditor';
+import HeroPortraitEditor from '@/components/admin/HeroPortraitEditor';
 import FooterEditor from '@/components/admin/FooterEditor';
 import SiteSettings from '@/components/admin/SiteSettings';
 import AboutEditor from '@/components/admin/AboutEditor';
@@ -106,7 +107,10 @@ const Admin = () => {
               <FolderOpen className="w-4 h-4" /> <span className="hidden sm:inline">Categories</span>
             </TabsTrigger>
             <TabsTrigger value="hero" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Sparkles className="w-4 h-4" /> <span className="hidden sm:inline">Hero</span>
+              <Sparkles className="w-4 h-4" /> <span className="hidden sm:inline">Hero Text</span>
+            </TabsTrigger>
+            <TabsTrigger value="hero-portrait" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Image className="w-4 h-4" /> <span className="hidden sm:inline">Hero Portrait</span>
             </TabsTrigger>
             <TabsTrigger value="marquee" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Film className="w-4 h-4" /> <span className="hidden sm:inline">Marquee</span>
@@ -128,6 +132,7 @@ const Admin = () => {
           <TabsContent value="videos"><VideoManager /></TabsContent>
           <TabsContent value="categories"><CategoryManager /></TabsContent>
           <TabsContent value="hero"><HeroEditor /></TabsContent>
+          <TabsContent value="hero-portrait"><HeroPortraitEditor /></TabsContent>
           <TabsContent value="marquee"><MarqueeEditor /></TabsContent>
           <TabsContent value="about"><AboutEditor /></TabsContent>
           <TabsContent value="footer"><FooterEditor /></TabsContent>

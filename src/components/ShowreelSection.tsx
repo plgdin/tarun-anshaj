@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useCms } from '@/context/CmsContext';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
@@ -69,6 +69,17 @@ export const ShowreelSection: React.FC = () => {
 
   const defaultVideo = directionVideos.find(v => v.title.toLowerCase().includes('budweiser')) || directionVideos[0];
   const [activeVideo, setActiveVideo] = useState<Video | null>(null);
+  const [isContainerHovered, setIsContainerHovered] = useState(false);
+  const [isScrolledPast, setIsScrolledPast] = useState(false);
+
+  const showreelDuration = data.heroContent.showreelDuration ?? 10;
+
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      setIsScrolledPast(latest > 0.85);
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress]);
 
   useEffect(() => {
     if (defaultVideo && (!activeVideo || !directionVideos.some(v => v.id === activeVideo.id))) {
@@ -92,7 +103,7 @@ export const ShowreelSection: React.FC = () => {
     setIsMuted(!isMuted);
   };
 
-  const handleVideoSelect = (video: Video) => {
+  const handleVideoSelect = useCallback((video: Video) => {
     setActiveVideo(video);
     setIsPlaying(true);
     if (videoRef.current) {
@@ -102,7 +113,45 @@ export const ShowreelSection: React.FC = () => {
         .then(() => setIsPlaying(true))
         .catch(err => console.log("Video play interrupted:", err));
     }
-  };
+  }, []);
+
+  const playNextVideo = useCallback(() => {
+    if (directionVideos.length <= 1) {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(err => console.log("Video play error:", err));
+      }
+      return;
+    }
+    
+    setActiveVideo((currentActive) => {
+      const active = currentActive || defaultVideo;
+      if (!active) return null;
+      
+      const currentIndex = directionVideos.findIndex(v => v.id === active.id);
+      const nextIndex = (currentIndex + 1) % directionVideos.length;
+      const nextVideo = directionVideos[nextIndex];
+      
+      if (videoRef.current) {
+        videoRef.current.src = nextVideo.videoUrl;
+        videoRef.current.load();
+        videoRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(err => console.log("Video autoplay next error:", err));
+      }
+      return nextVideo;
+    });
+  }, [directionVideos, defaultVideo]);
+
+  useEffect(() => {
+    if (!isPlaying || !showreelDuration || showreelDuration <= 0) return;
+    
+    const timer = setTimeout(() => {
+      playNextVideo();
+    }, showreelDuration * 1000);
+    
+    return () => clearTimeout(timer);
+  }, [activeVideo, isPlaying, showreelDuration, playNextVideo]);
 
   return (
     <div ref={containerRef} className="hero-scroll-wrapper relative z-10" id="showreel">
@@ -129,6 +178,8 @@ export const ShowreelSection: React.FC = () => {
               y: cardY,
               borderRadius: cardBorderRadius
             }}
+            onMouseEnter={() => setIsContainerHovered(true)}
+            onMouseLeave={() => setIsContainerHovered(false)}
             className="hero-scroll-card-wrapper"
           >
             {/* Card inner media content */}
@@ -141,15 +192,19 @@ export const ShowreelSection: React.FC = () => {
                 ref={videoRef}
                 src={activeVideo?.videoUrl || "/6.mp4"}
                 autoPlay
-                loop
                 muted={isMuted}
                 playsInline
+                onEnded={playNextVideo}
                 className="w-full h-full object-cover brightness-95"
               />
 
               {/* Sleek Interactive Controls Panel Overlay */}
               <motion.div 
-                style={{ opacity: overlayOpacity }}
+                initial={{ opacity: 0 }}
+                animate={{ 
+                  opacity: (isScrolledPast && (isContainerHovered || isMobile)) ? 1 : 0 
+                }}
+                transition={{ duration: 0.3 }}
                 className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 bg-gradient-to-t from-black/95 via-black/60 to-transparent flex flex-col md:flex-row md:items-end justify-between gap-4 z-20 pointer-events-auto"
               >
                 {/* Currently Playing Info & Mute/Play Controls */}

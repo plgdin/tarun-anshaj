@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Save, Download, Upload, RotateCcw, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,6 +27,11 @@ const SiteSettings = () => {
   const { data, updateSiteSettings, updatePassword, exportData, importData, resetToDefaults } = useCms();
   const [siteName, setSiteName] = useState(data.siteSettings.siteName);
   const [siteDesc, setSiteDesc] = useState(data.siteSettings.siteDescription);
+  const [email, setEmail] = useState(data.siteSettings.email || '');
+  const [instagramUrl, setInstagramUrl] = useState(data.siteSettings.instagramUrl || '');
+  const [linkedinUrl, setLinkedinUrl] = useState(data.siteSettings.linkedinUrl || '');
+  const [behanceUrl, setBehanceUrl] = useState(data.siteSettings.behanceUrl || '');
+  const [youtubeUrl, setYoutubeUrl] = useState(data.siteSettings.youtubeUrl || '');
   const [titleFont, setTitleFont] = useState(data.siteSettings.titleFont || 'Montserrat');
   const [descriptionFont, setDescriptionFont] = useState(data.siteSettings.descriptionFont || 'Kanit');
   const [headerFont, setHeaderFont] = useState(data.siteSettings.headerFont || 'Montserrat');
@@ -36,11 +41,30 @@ const SiteSettings = () => {
   const [showResetDialog, setShowResetDialog] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    setSiteName(data.siteSettings.siteName);
+    setSiteDesc(data.siteSettings.siteDescription);
+    setEmail(data.siteSettings.email || '');
+    setInstagramUrl(data.siteSettings.instagramUrl || '');
+    setLinkedinUrl(data.siteSettings.linkedinUrl || '');
+    setBehanceUrl(data.siteSettings.behanceUrl || '');
+    setYoutubeUrl(data.siteSettings.youtubeUrl || '');
+    setTitleFont(data.siteSettings.titleFont || 'Montserrat');
+    setDescriptionFont(data.siteSettings.descriptionFont || 'Kanit');
+    setHeaderFont(data.siteSettings.headerFont || 'Montserrat');
+    setFooterFont(data.siteSettings.footerFont || 'Kanit');
+  }, [data.siteSettings]);
+
   const handleSaveSettings = () => {
     updateSiteSettings({ 
       ...data.siteSettings, 
       siteName, 
       siteDescription: siteDesc, 
+      email,
+      instagramUrl,
+      linkedinUrl,
+      behanceUrl,
+      youtubeUrl,
       titleFont, 
       descriptionFont,
       headerFont,
@@ -103,6 +127,11 @@ const SiteSettings = () => {
     resetToDefaults();
     setSiteName('TARUN KAPOOR');
     setSiteDesc('Director & Cinematographer');
+    setEmail('tarun@3dcreator.com');
+    setInstagramUrl('https://instagram.com/tarun_kapoor10');
+    setLinkedinUrl('https://linkedin.com');
+    setBehanceUrl('https://www.behance.net/tarunkapoor2');
+    setYoutubeUrl('');
     setTitleFont('Montserrat');
     setDescriptionFont('Kanit');
     setHeaderFont('Montserrat');
@@ -114,6 +143,11 @@ const SiteSettings = () => {
   const settingsChanged = 
     siteName !== data.siteSettings.siteName || 
     siteDesc !== data.siteSettings.siteDescription ||
+    email !== (data.siteSettings.email || '') ||
+    instagramUrl !== (data.siteSettings.instagramUrl || '') ||
+    linkedinUrl !== (data.siteSettings.linkedinUrl || '') ||
+    behanceUrl !== (data.siteSettings.behanceUrl || '') ||
+    youtubeUrl !== (data.siteSettings.youtubeUrl || '') ||
     titleFont !== (data.siteSettings.titleFont || 'Montserrat') ||
     descriptionFont !== (data.siteSettings.descriptionFont || 'Kanit') ||
     headerFont !== (data.siteSettings.headerFont || 'Montserrat') ||
@@ -137,6 +171,28 @@ const SiteSettings = () => {
           <div>
             <Label>Site Description</Label>
             <Input value={siteDesc} onChange={(e) => setSiteDesc(e.target.value)} className="bg-secondary border-border mt-1" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label>Contact Email</Label>
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} className="bg-secondary border-border mt-1" />
+            </div>
+            <div>
+              <Label>Instagram URL</Label>
+              <Input value={instagramUrl} onChange={(e) => setInstagramUrl(e.target.value)} className="bg-secondary border-border mt-1" />
+            </div>
+            <div>
+              <Label>LinkedIn URL</Label>
+              <Input value={linkedinUrl} onChange={(e) => setLinkedinUrl(e.target.value)} className="bg-secondary border-border mt-1" />
+            </div>
+            <div>
+              <Label>Behance URL</Label>
+              <Input value={behanceUrl} onChange={(e) => setBehanceUrl(e.target.value)} className="bg-secondary border-border mt-1" />
+            </div>
+            <div className="md:col-span-2">
+              <Label>YouTube Channel URL (Optional)</Label>
+              <Input value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} className="bg-secondary border-border mt-1" />
+            </div>
           </div>
           
           <Separator className="my-6" />

@@ -3,8 +3,6 @@ import { Save, ArrowUp, ArrowDown, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCms } from '@/context/CmsContext';
 import type { HeroContent } from '@/types/cms';
 import { toast } from 'sonner';
@@ -23,7 +21,7 @@ const HeroEditor = () => {
     });
   }, [data.heroContent]);
 
-  const updateField = (field: keyof HeroContent, value: string) => {
+  const updateField = (field: keyof HeroContent, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -57,7 +55,7 @@ const HeroEditor = () => {
 
   const handleSave = () => {
     updateHeroContent(form);
-    toast.success('Hero section updated');
+    toast.success('Hero general settings saved');
   };
 
   const hasChanges = JSON.stringify(form) !== JSON.stringify(data.heroContent);
@@ -66,24 +64,57 @@ const HeroEditor = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display text-2xl text-primary">Hero Section</h2>
+          <h2 className="font-display text-2xl text-primary">Hero General Settings</h2>
           <p className="text-sm text-muted-foreground mt-1">
-            Customize the main banner displayed at the top of the site
+            Customize the tagline text and the featured slideshow videos shown in the background.
           </p>
         </div>
         <Button onClick={handleSave} disabled={!hasChanges} className="gap-2">
-          <Save className="w-4 h-4" /> Save Changes
+          <Save className="w-4 h-4" /> Save Settings
         </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Profile Info & Tagline (Left Column) */}
+        <div className="lg:col-span-5 bg-zinc-900/50 p-6 rounded-lg border border-white/10 space-y-4">
+          <h3 className="text-sm font-semibold text-foreground border-b border-white/10 pb-2">Tagline Settings</h3>
+          
+          <div className="space-y-2">
+            <Label htmlFor="badge">Tagline / Location Text</Label>
+            <Input
+              id="badge"
+              value={form.badge}
+              onChange={(e) => updateField('badge', e.target.value)}
+              className="bg-black/50 border-white/10"
+              placeholder="e.g. Director / Writer / Story"
+            />
+            <p className="text-xs text-muted-foreground">
+              This text determines the tagline and dynamically updates the first three words of the description.
+            </p>
+          </div>
 
+          <div className="space-y-2 pt-4 border-t border-white/5">
+            <Label htmlFor="showreelDuration">Showreel Clip Duration (seconds)</Label>
+            <Input
+              id="showreelDuration"
+              type="number"
+              min="0"
+              value={form.showreelDuration !== undefined ? form.showreelDuration : 10}
+              onChange={(e) => updateField('showreelDuration', parseInt(e.target.value) || 0)}
+              className="bg-black/50 border-white/10"
+              placeholder="e.g. 10"
+            />
+            <p className="text-xs text-muted-foreground">
+              Number of seconds to show each video in the showreel before auto-switching. Set to 0 to play the full video without cut-off.
+            </p>
+          </div>
+        </div>
 
-        {/* Slideshow */}
-        <div className="lg:col-span-12 w-full max-w-3xl pt-6 lg:pt-0">
-          <h3 className="text-sm font-semibold text-foreground mb-3">Hero Slideshow Videos</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Select the videos you want to feature in the hero slider and drag them to reorder.
+        {/* Slideshow (Right Column) */}
+        <div className="lg:col-span-7 bg-zinc-900/50 p-6 rounded-lg border border-white/10 space-y-4">
+          <h3 className="text-sm font-semibold text-foreground border-b border-white/10 pb-2">Hero Slideshow Videos</h3>
+          <p className="text-sm text-muted-foreground">
+            Select the videos you want to feature in the background marquee scroll and drag to reorder.
           </p>
           
           <div className="space-y-3 mb-4">
@@ -134,24 +165,24 @@ const HeroEditor = () => {
           </div>
 
           <div>
-            <Select key={(form.slideshowVideos || []).join(',')} onValueChange={(val) => {
-              if (val) {
-                handleAddSlideshowVideo(val);
-              }
-            }}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Add a video to slideshow..." />
-              </SelectTrigger>
-              <SelectContent>
-                {data.videos
-                  .filter((v) => !(form.slideshowVideos || []).includes(v.id))
-                  .map((v) => (
-                    <SelectItem key={v.id} value={v.id}>
-                      {v.title}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
+            <select 
+              value="" 
+              onChange={(e) => {
+                if (e.target.value) {
+                  handleAddSlideshowVideo(e.target.value);
+                }
+              }}
+              className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-sm text-foreground focus:outline-none"
+            >
+              <option value="" disabled>Add a video to slideshow...</option>
+              {data.videos
+                .filter((v) => !(form.slideshowVideos || []).includes(v.id))
+                .map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.title}
+                  </option>
+                ))}
+            </select>
           </div>
         </div>
       </div>

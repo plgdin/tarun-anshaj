@@ -19,6 +19,11 @@ interface MinimalistHeroProps {
   socialLinks: { icon: LucideIcon; href: string }[];
   locationText: string;
   className?: string;
+  popOutImage?: boolean;
+  heroImageScale?: number;
+  heroImageXOffset?: number;
+  heroImageYOffset?: number;
+  circleColor?: string;
 }
 
 // Helper component for navigation links
@@ -50,6 +55,11 @@ export const MinimalistHero = ({
   socialLinks,
   locationText,
   className,
+  popOutImage = true,
+  heroImageScale,
+  heroImageXOffset,
+  heroImageYOffset,
+  circleColor = '#eab308',
 }: MinimalistHeroProps) => {
   const [scale, setScale] = React.useState(1.9);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -255,56 +265,78 @@ export const MinimalistHero = ({
             className="relative flex items-end justify-center"
           >
 
-            {/* Yellow Circle Backdrop */}
+            {/* Circle Backdrop */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-              className="absolute inset-0 rounded-full bg-yellow-500/80 shadow-[0_0_40px_rgba(234,179,8,0.15)]"
+              style={{ 
+                backgroundColor: circleColor || '#eab308',
+                boxShadow: `0 0 40px ${(circleColor || '#eab308')}26`
+              }}
+              className="absolute inset-0 rounded-full opacity-80"
             ></motion.div>
 
             {/* 1. Clipped Image (Bottom portion of body is cut off by the circle shape) */}
             <div className="absolute inset-0 rounded-full overflow-hidden flex items-end justify-center">
-              <motion.img
-                src={imageSrc}
-                alt={imageAlt}
+              <motion.div
                 style={{
-                  width: 'calc(var(--circle-size) * 0.54)',
-                  height: 'calc(var(--circle-size) * 0.73)',
+                  width: '100%',
+                  height: '100%',
+                  x: heroImageXOffset !== undefined ? `${heroImageXOffset}%` : "0%",
+                  y: heroImageYOffset !== undefined ? `${heroImageYOffset}%` : "0%",
+                  scale: heroImageScale !== undefined ? heroImageScale : (popOutImage ? scale : 1.0),
                 }}
-                className="relative z-10 object-cover object-top origin-bottom"
-                initial={{ opacity: 0, y: 50, scale }}
-                animate={{ opacity: 1, y: 0, scale }}
-                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.onerror = null;
-                  target.src = `https://placehold.co/400x600/eab308/ffffff?text=Image+Not+Found`;
-                }}
-              />
+                className="relative z-10 origin-bottom flex items-end justify-center"
+              >
+                <motion.img
+                  src={imageSrc}
+                  alt={imageAlt}
+                  className="w-full h-full object-cover object-top origin-bottom"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = `https://placehold.co/400x600/eab308/ffffff?text=Image+Not+Found`;
+                  }}
+                />
+              </motion.div>
             </div>
 
             {/* 2. Unclipped Image (Top portion of body/head pops out of the circle boundary) */}
-            <div className="absolute inset-0 flex items-end justify-center pointer-events-none">
-              <motion.img
-                src={imageSrc}
-                alt={imageAlt}
-                style={{
-                  width: 'calc(var(--circle-size) * 0.54)',
-                  height: 'calc(var(--circle-size) * 0.73)',
-                  clipPath: 'inset(0% 0% 30% 0%)'
-                }}
-                className="relative z-20 object-cover object-top origin-bottom"
-                initial={{ opacity: 0, y: 50, scale }}
-                animate={{ opacity: 1, y: 0, scale }}
-                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.onerror = null;
-                  target.src = `https://placehold.co/400x600/eab308/ffffff?text=Image+Not+Found`;
-                }}
-              />
-            </div>
+            {popOutImage && (
+              <div 
+                style={{ clipPath: 'inset(-100% -100% 50% -100%)' }}
+                className="absolute inset-0 flex items-end justify-center pointer-events-none"
+              >
+                <motion.div
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    x: heroImageXOffset !== undefined ? `${heroImageXOffset}%` : "0%",
+                    y: heroImageYOffset !== undefined ? `${heroImageYOffset}%` : "0%",
+                    scale: heroImageScale !== undefined ? heroImageScale : scale,
+                  }}
+                  className="relative z-20 origin-bottom flex items-end justify-center"
+                >
+                  <motion.img
+                    src={imageSrc}
+                    alt={imageAlt}
+                    className="w-full h-full object-cover object-top origin-bottom"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = `https://placehold.co/400x600/eab308/ffffff?text=Image+Not+Found`;
+                    }}
+                  />
+                </motion.div>
+              </div>
+            )}
 
           </div>
         </div>

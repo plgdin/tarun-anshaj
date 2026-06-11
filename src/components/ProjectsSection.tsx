@@ -5,7 +5,14 @@ import { useCms } from '@/context/CmsContext';
 export const ProjectsSection: React.FC = () => {
     const { data } = useCms();
     const [filter, setFilter] = useState<string>('youtube');
-    const [activeMedia, setActiveMedia] = useState<{ type: 'video' | 'iframe', url: string } | null>(null);
+    const [activeMedia, setActiveMedia] = useState<{ 
+        type: 'video' | 'iframe', 
+        url: string,
+        title?: string,
+        description?: string,
+        duration?: string,
+        year?: string
+    } | null>(null);
 
     const filtered = data.videos.filter(p => p.category === filter);
 
@@ -88,7 +95,11 @@ export const ProjectsSection: React.FC = () => {
                                 <button 
                                     key={deck.id} 
                                     className="studio-item text-left w-full focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-xl"
-                                    onClick={() => setActiveMedia({ type: 'iframe', url: deck.embedUrl })}
+                                    onClick={() => setActiveMedia({ 
+                                        type: 'iframe', 
+                                        url: deck.embedUrl,
+                                        title: deck.title
+                                    })}
                                 >
                                     <div className="studio-item-visual relative bg-black/50">
                                         {/* Dynamic Fallback Background */}
@@ -134,7 +145,14 @@ export const ProjectsSection: React.FC = () => {
                                 <button 
                                     key={p.id} 
                                     className="studio-item text-left w-full focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-xl"
-                                    onClick={() => setActiveMedia({ type: 'video', url: p.videoUrl })}
+                                    onClick={() => setActiveMedia({ 
+                                        type: 'video', 
+                                        url: p.videoUrl,
+                                        title: p.title,
+                                        description: p.description,
+                                        duration: p.duration,
+                                        year: p.year
+                                    })}
                                 >
                                     <div className="studio-item-visual">
                                         <img
@@ -169,15 +187,15 @@ export const ProjectsSection: React.FC = () => {
             {/* Video/Iframe Modal Overlay */}
             {activeMedia && (
                 <div 
-                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 overflow-y-auto"
                     onClick={() => setActiveMedia(null)}
                 >
                     <div 
-                        className="relative w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden border border-white/10 shadow-2xl"
+                        className="relative w-full max-w-4xl bg-zinc-950 rounded-2xl overflow-hidden border border-white/10 shadow-2xl flex flex-col my-8 max-h-[90vh]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button 
-                            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/60 text-white/80 hover:text-white hover:bg-black transition-colors"
+                            className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/60 text-white/80 hover:text-white hover:bg-black transition-colors shadow-lg"
                             onClick={() => setActiveMedia(null)}
                             aria-label="Close modal"
                         >
@@ -186,20 +204,54 @@ export const ProjectsSection: React.FC = () => {
                                 <line x1="6" y1="6" x2="18" y2="18" />
                             </svg>
                         </button>
-                        {activeMedia.type === 'video' ? (
-                            <video 
-                                src={activeMedia.url} 
-                                autoPlay 
-                                controls 
-                                className="w-full h-full object-contain"
-                            />
-                        ) : (
-                            <iframe 
-                                src={activeMedia.url}
-                                className="w-full h-full border-0 bg-white"
-                                allowFullScreen
-                                allow="fullscreen"
-                            />
+                        
+                        {/* Video Wrapper (Forces 16:9 Aspect Ratio) */}
+                        <div className="w-full aspect-video bg-black relative">
+                            {activeMedia.type === 'video' ? (
+                                <video 
+                                    src={activeMedia.url} 
+                                    autoPlay 
+                                    controls 
+                                    className="w-full h-full object-contain"
+                                />
+                            ) : (
+                                <iframe 
+                                    src={activeMedia.url}
+                                    className="w-full h-full border-0 bg-white"
+                                    allowFullScreen
+                                    allow="fullscreen"
+                                />
+                            )}
+                        </div>
+
+                        {/* Credits & Description Section */}
+                        {activeMedia.title && (
+                            <div className="p-6 overflow-y-auto border-t border-white/10 bg-zinc-900/30 text-left flex-1 max-h-[35vh]">
+                                <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-white/5">
+                                    <h3 className="text-lg sm:text-xl font-bold font-montserrat text-white">
+                                        {activeMedia.title}
+                                    </h3>
+                                    <div className="flex items-center gap-2 text-xs">
+                                        {activeMedia.year && (
+                                            <span className="px-2 py-1 rounded bg-white/10 text-white/90 font-medium">
+                                                {activeMedia.year}
+                                            </span>
+                                        )}
+                                        {activeMedia.duration && (
+                                            <span className="px-2 py-1 rounded bg-white/10 text-white/90 font-medium">
+                                                {activeMedia.duration}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                                {activeMedia.description ? (
+                                    <p className="text-sm text-gray-300 font-sans whitespace-pre-wrap leading-relaxed pt-3">
+                                        {activeMedia.description}
+                                    </p>
+                                ) : (
+                                    <p className="text-xs text-muted-foreground italic pt-3">No credits or description available for this project.</p>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>

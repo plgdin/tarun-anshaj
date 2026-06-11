@@ -38,6 +38,12 @@ export interface HeroContent {
   slideshowVideos: string[];
   marqueeRow1: string[];
   marqueeRow2: string[];
+  popOutHeroImage?: boolean;
+  heroImageScale?: number;
+  heroImageXOffset?: number;
+  heroImageYOffset?: number;
+  circleColor?: string;
+  showreelDuration?: number;
 }
 
 export interface FooterContent {
