@@ -28,7 +28,7 @@ const getDefaultData = (): CmsData => ({
     footerFont: 'Kanit',
   },
   heroContent: {
-    badge: 'Director Actor & Writer',
+    badge: 'Director / Writer / Story',
     title: defaultFeaturedVideo.title,
     location: 'Bangalore, India',
     availability: 'Available for Freelance & Fulltime',
@@ -56,8 +56,8 @@ const getDefaultData = (): CmsData => ({
     ],
   },
   aboutContent: {
-    heroDescription: "A director, actor, and writer driven by compelling storytelling, rich character development, and cinematic experiences. Crafting narratives that evoke raw emotion and capture human truth.",
-    aboutDescription: "As a director, actor, and screenwriter, I focus on crafting rich visual narratives, compelling character development, and unforgettable cinematic journeys. I truly enjoy collaborating on projects that challenge boundaries and tell deep human truths. Let's create something extraordinary together!"
+    heroDescription: "A director, writer, and storyteller driven by compelling storytelling, rich character development, and cinematic experiences. Crafting narratives that evoke raw emotion and capture human truth.",
+    aboutDescription: "As a director and screenwriter, I focus on crafting rich visual narratives, compelling character development, and unforgettable cinematic journeys. I truly enjoy collaborating on projects that challenge boundaries and tell deep human truths. Let's create something extraordinary together!"
   },
   categories: [...defaultCategories],
   videos: [...defaultVideos],
@@ -356,7 +356,13 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         aboutDescription: settings?.about_content?.aboutDescription || settings?.about_content?.description1 || defaultData.aboutContent.aboutDescription,
       },
       footerContent: settings?.footer_content || defaultData.footerContent,
-      categories: (categories || []).map(c => ({ id: c.id, title: c.title, slug: c.slug })),
+      categories: (categories || []).map(c => {
+        let title = c.title;
+        if (c.slug === 'DA/CD' || c.id === 'short') {
+          title = 'DA / AD';
+        }
+        return { id: c.id, title, slug: c.slug };
+      }),
       videos: mappedVideos,
       pitchDecks: settings?.hero_content?.pitchDecks || defaultData.pitchDecks
     };

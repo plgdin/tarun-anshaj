@@ -4,10 +4,21 @@ import { useCms } from '@/context/CmsContext';
 
 export const ProjectsSection: React.FC = () => {
     const { data } = useCms();
-    const [filter, setFilter] = useState<string>('all');
+    const [filter, setFilter] = useState<string>('youtube');
     const [activeMedia, setActiveMedia] = useState<{ type: 'video' | 'iframe', url: string } | null>(null);
 
-    const filtered = filter === 'all' ? data.videos : data.videos.filter(p => p.category === filter);
+    const filtered = data.videos.filter(p => p.category === filter);
+
+    // Deduplicate videos by title to avoid database duplicates in UI
+    const uniqueFiltered: typeof data.videos = [];
+    const seenTitles = new Set<string>();
+    filtered.forEach(vid => {
+        const titleKey = vid.title.trim().toLowerCase();
+        if (!seenTitles.has(titleKey)) {
+            seenTitles.add(titleKey);
+            uniqueFiltered.push(vid);
+        }
+    });
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -45,16 +56,21 @@ export const ProjectsSection: React.FC = () => {
                             <span className="window-dot red" />
                             <span className="window-dot yellow" />
                             <span className="window-dot green" />
-                            <span className="window-title">CreatorStudio_v1.0.4</span>
                         </div>
                         
                         {/* Filter Tabs inside the window dashboard */}
                         <div className="portfolio-studio-tabs">
                             <button
-                                onClick={() => setFilter('all')}
-                                className={`portfolio-studio-tab-btn ${filter === 'all' ? 'active' : ''}`}
+                                onClick={() => setFilter('youtube')}
+                                className={`portfolio-studio-tab-btn ${filter === 'youtube' ? 'active' : ''}`}
                             >
-                                All Work
+                                Direction
+                            </button>
+                            <button
+                                onClick={() => setFilter('DA/CD')}
+                                className={`portfolio-studio-tab-btn ${filter === 'DA/CD' ? 'active' : ''}`}
+                            >
+                                DA / AD
                             </button>
                             <button
                                 onClick={() => setFilter('pitch-decks')}
@@ -62,17 +78,6 @@ export const ProjectsSection: React.FC = () => {
                             >
                                 Pitch Decks
                             </button>
-                            {data.categories.map((cat) => (
-                                <button
-                                    key={cat.id}
-                                    onClick={() => setFilter(cat.slug)}
-                                    className={`portfolio-studio-tab-btn ${
-                                        filter === cat.slug ? 'active' : ''
-                                    }`}
-                                >
-                                    {cat.title}
-                                </button>
-                            ))}
                         </div>
                     </div>
 
@@ -125,7 +130,7 @@ export const ProjectsSection: React.FC = () => {
                                 </button>
                             ))
                         ) : (
-                            filtered.map((p) => (
+                            uniqueFiltered.map((p) => (
                                 <button 
                                     key={p.id} 
                                     className="studio-item text-left w-full focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-xl"

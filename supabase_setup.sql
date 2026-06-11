@@ -43,3 +43,30 @@ CREATE POLICY "Allow public read videos" ON videos FOR SELECT USING (true);
 CREATE POLICY "Allow auth write global_settings" ON global_settings FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Allow auth write categories" ON categories FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Allow auth write videos" ON videos FOR ALL USING (auth.role() = 'authenticated');
+
+-- =========================================================================
+-- Storage Bucket Setup for 'images'
+-- =========================================================================
+
+-- Create the images bucket
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('images', 'images', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Allow public read access to images
+CREATE POLICY "Allow public read access to images"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'images');
+
+-- Allow authenticated users to upload images
+CREATE POLICY "Allow auth insert to images"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (bucket_id = 'images');
+
+-- Allow authenticated users to update or delete their images
+CREATE POLICY "Allow auth update and delete to images"
+ON storage.objects FOR ALL
+TO authenticated
+USING (bucket_id = 'images');
+

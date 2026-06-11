@@ -22,16 +22,16 @@ export const HeroSection = () => {
     <MinimalistHero
       logoText={siteSettings.siteName || "Tarun Kapoor"}
       navLinks={navLinks}
-      mainText={aboutContent?.heroDescription || "A director, actor, and writer driven by compelling storytelling, rich character development, and cinematic experiences. Crafting narratives that evoke raw emotion and capture human truth."}
+      mainText={aboutContent?.heroDescription || "A director, writer, and storyteller driven by compelling storytelling, rich character development, and cinematic experiences. Crafting narratives that evoke raw emotion and capture human truth."}
       readMoreLink="#about"
       imageSrc="/tarun-hero.png"
-      imageAlt="Tarun Kapoor — Director, Actor & Writer portrait"
+      imageAlt="Tarun Kapoor — Director, Writer & Storyteller portrait"
       overlayText={{
         part1: "hi, i'm",
         part2: 'tarun.',
       }}
       socialLinks={socialLinks}
-      locationText="Director / Actor / Writer"
+      locationText="Director / Writer / Story"
     />
   );
 };
