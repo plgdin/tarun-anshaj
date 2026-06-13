@@ -120,6 +120,8 @@ export const ProjectsSection: React.FC = () => {
                                                 src={deck.thumbnail}
                                                 alt={deck.title}
                                                 className="relative w-full h-full object-cover"
+                                                loading="lazy"
+                                                decoding="async"
                                                 onError={(e) => {
                                                     const target = e.target as HTMLImageElement;
                                                     target.style.display = 'none';
@@ -158,6 +160,8 @@ export const ProjectsSection: React.FC = () => {
                                         <img
                                             src={p.thumbnail || ''}
                                             alt={p.title}
+                                            loading="lazy"
+                                            decoding="async"
                                             onError={(e) => {
                                                 const target = e.target as HTMLImageElement;
                                                 target.onerror = null;

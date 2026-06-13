@@ -296,6 +296,8 @@ export const MinimalistHero = ({
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                  loading="eager"
+                  fetchPriority="high"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.onerror = null;
@@ -328,6 +330,8 @@ export const MinimalistHero = ({
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                    loading="eager"
+                    fetchPriority="high"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.onerror = null;

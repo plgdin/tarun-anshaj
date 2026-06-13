@@ -25,6 +25,8 @@ export const AboutSection: React.FC = () => {
           alt="About Icon Top Left"
           className="w-[120px] sm:w-[180px] md:w-[240px] lg:w-[290px] xl:w-[310px] h-auto object-contain"
           style={{ transform: 'rotate(35deg)' }}
+          loading="lazy"
+          decoding="async"
         />
       </FadeIn>
 
@@ -41,6 +43,8 @@ export const AboutSection: React.FC = () => {
           alt="About Icon Bottom Left"
           className="w-[100px] sm:w-[150px] md:w-[200px] lg:w-[240px] xl:w-[270px] h-auto object-contain"
           style={{ transform: 'scaleX(-1) rotate(25deg)' }}
+          loading="lazy"
+          decoding="async"
         />
       </FadeIn>
 
@@ -56,6 +60,8 @@ export const AboutSection: React.FC = () => {
           src="/3.png"
           alt="About Icon Top Right"
           className="w-[120px] sm:w-[180px] md:w-[240px] lg:w-[290px] xl:w-[310px] h-auto object-contain -rotate-[15deg]"
+          loading="lazy"
+          decoding="async"
         />
       </FadeIn>
 
@@ -71,6 +77,8 @@ export const AboutSection: React.FC = () => {
           src="/4.png"
           alt="About Icon Bottom Right"
           className="w-[130px] sm:w-[180px] md:w-[240px] lg:w-[290px] xl:w-[320px] h-auto object-contain -rotate-[12deg]"
+          loading="lazy"
+          decoding="async"
         />
       </FadeIn>
 
