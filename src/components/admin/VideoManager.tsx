@@ -151,7 +151,11 @@ const VideoManager = () => {
           upload.start();
         });
         
-        const cdnHost = import.meta.env.VITE_BUNNY_CDN_HOSTNAME || 'vz-8dd5403f-611.b-cdn.net';
+        const cdnHost = import.meta.env.VITE_BUNNY_CDN_HOSTNAME;
+        if (!cdnHost) {
+          toast.error('VITE_BUNNY_CDN_HOSTNAME is not configured in your environment variables (.env.local)');
+          throw new Error('VITE_BUNNY_CDN_HOSTNAME is missing');
+        }
         finalVideoUrl = `https://${cdnHost}/${videoId}/play_720p.mp4`;
         const autoThumbnail = `https://${cdnHost}/${videoId}/thumbnail.jpg`;
         
@@ -163,7 +167,7 @@ const VideoManager = () => {
         toast.success('Video uploaded to Bunny CDN');
       } catch (err) {
         console.error(err);
-        toast.error('Failed to upload video');
+        toast.error(err instanceof Error ? err.message : 'Failed to upload video');
         setIsUploading(false);
         return;
       }
@@ -323,7 +327,16 @@ const VideoManager = () => {
               {/* Position number */}
               <span className="flex-shrink-0 w-6 text-center text-xs font-mono text-muted-foreground/60">{idx + 1}</span>
               <div className="w-24 h-14 rounded overflow-hidden flex-shrink-0 bg-card">
-                <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600&auto=format&fit=crop&q=80';
+                  }}
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm font-semibold text-foreground truncate">{video.title}</h3>
@@ -615,7 +628,11 @@ const PreviewVideoCard = ({ video, index, onEdit, onDelete, isDragging, isDragOv
             'w-full h-full object-cover transition-transform duration-500',
             isHovered && 'scale-110'
           )}
-          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.onerror = null;
+            target.src = 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&auto=format&fit=crop&q=80';
+          }}
         />
 
         {/* Overlay */}

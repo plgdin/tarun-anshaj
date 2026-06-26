@@ -92,7 +92,7 @@ export const ShowreelSection: React.FC = () => {
     if (isPlaying) {
       videoRef.current.pause();
     } else {
-      videoRef.current.play();
+      videoRef.current.play().catch(err => console.log("Play failed:", err));
     }
     setIsPlaying(!isPlaying);
   };
@@ -106,13 +106,6 @@ export const ShowreelSection: React.FC = () => {
   const handleVideoSelect = useCallback((video: Video) => {
     setActiveVideo(video);
     setIsPlaying(true);
-    if (videoRef.current) {
-      videoRef.current.src = video.videoUrl;
-      videoRef.current.load();
-      videoRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch(err => console.log("Video play interrupted:", err));
-    }
   }, []);
 
   const playNextVideo = useCallback(() => {
@@ -130,19 +123,32 @@ export const ShowreelSection: React.FC = () => {
       
       const currentIndex = directionVideos.findIndex(v => v.id === active.id);
       const nextIndex = (currentIndex + 1) % directionVideos.length;
-      const nextVideo = directionVideos[nextIndex];
-      
-      if (videoRef.current) {
-        videoRef.current.src = nextVideo.videoUrl;
-        videoRef.current.load();
-        videoRef.current.play()
-          .then(() => setIsPlaying(true))
-          .catch(err => console.log("Video autoplay next error:", err));
-      }
-      return nextVideo;
+      return directionVideos[nextIndex];
     });
   }, [directionVideos, defaultVideo]);
 
+  // Synchronize native video element state with React activeVideo/isPlaying state
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !activeVideo?.videoUrl) return;
+
+    // Check if source changed to avoid reload loops
+    if (video.src !== activeVideo.videoUrl) {
+      video.load();
+    }
+
+    if (isPlaying) {
+      video.play().catch(err => {
+        if (err.name !== 'AbortError') {
+          console.log("Playback failed:", err);
+        }
+      });
+    } else {
+      video.pause();
+    }
+  }, [activeVideo?.videoUrl, isPlaying]);
+
+  // Manage showreel auto-advance timer
   useEffect(() => {
     if (!isPlaying || !showreelDuration || showreelDuration <= 0) return;
     
