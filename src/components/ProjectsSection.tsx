@@ -215,6 +215,7 @@ export const ProjectsSection: React.FC = () => {
                                 <video 
                                     src={activeMedia.url} 
                                     autoPlay 
+                                    preload="auto"
                                     controls 
                                     className="w-full h-full object-contain"
                                 />

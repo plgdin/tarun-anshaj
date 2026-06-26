@@ -53,6 +53,7 @@ export const MarqueeSection: React.FC = () => {
             <video
               src={videoUrl}
               autoPlay
+              preload="auto"
               loop
               muted
               playsInline

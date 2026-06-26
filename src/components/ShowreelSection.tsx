@@ -132,8 +132,12 @@ export const ShowreelSection: React.FC = () => {
     const video = videoRef.current;
     if (!video || !activeVideo?.videoUrl) return;
 
-    // Check if source changed to avoid reload loops
-    if (video.src !== activeVideo.videoUrl) {
+    // Resolve relative URLs to absolute so browser host comparison matches correctly
+    const absoluteVideoUrl = activeVideo.videoUrl.startsWith('http')
+      ? activeVideo.videoUrl
+      : `${window.location.origin}${activeVideo.videoUrl.startsWith('/') ? '' : '/'}${activeVideo.videoUrl}`;
+
+    if (video.src !== absoluteVideoUrl) {
       video.load();
     }
 
@@ -198,6 +202,7 @@ export const ShowreelSection: React.FC = () => {
                 ref={videoRef}
                 src={activeVideo?.videoUrl || "/6.mp4"}
                 autoPlay
+                preload="auto"
                 muted={isMuted}
                 playsInline
                 onEnded={playNextVideo}
