@@ -5,6 +5,22 @@ export const MarqueeSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState(0);
   const { data } = useCms();
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   const row1Images = data.heroContent?.marqueeRow1 || [];
   const row2Images = data.heroContent?.marqueeRow2 || [];
@@ -19,8 +35,13 @@ export const MarqueeSection: React.FC = () => {
   const renderMedia = (url: string, index: number) => {
     const matchedVideo = data.videos.find((v) => v.thumbnail === url || v.id === url);
     
-    if (matchedVideo && matchedVideo.videoUrl) {
-      const videoUrl = matchedVideo.videoUrl;
+    if (isVisible && matchedVideo && matchedVideo.videoUrl) {
+      let videoUrl = matchedVideo.videoUrl;
+      
+      // Optimize marquee playback by using 360p resolution version instead of 720p
+      if (videoUrl.includes('play_720p.mp4')) {
+        videoUrl = videoUrl.replace('play_720p.mp4', 'play_360p.mp4');
+      }
       
       // MP4 / WebM Direct Playback
       if (videoUrl.endsWith('.mp4') || videoUrl.endsWith('.webm') || videoUrl.includes('bunnycdn')) {
