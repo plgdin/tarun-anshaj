@@ -125,7 +125,17 @@ const VideoManager = () => {
           body: JSON.stringify({ title: formData.title }),
         });
         
-        if (!authRes.ok) throw new Error('Failed to authorize upload');
+        if (!authRes.ok) {
+          const errText = await authRes.text();
+          let parsedError = `Failed to authorize upload (HTTP ${authRes.status})`;
+          try {
+            const errJson = JSON.parse(errText);
+            parsedError = errJson.error || `${parsedError}: ${errJson.message || 'Unknown Error'}`;
+          } catch (e) {
+            parsedError = errText.substring(0, 100) || parsedError;
+          }
+          throw new Error(parsedError);
+        }
         const { libraryId, videoId, signature, expirationTime } = await authRes.json();
         
         await new Promise<void>((resolve, reject) => {
