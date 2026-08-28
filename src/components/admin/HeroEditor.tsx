@@ -54,11 +54,18 @@ const HeroEditor = () => {
   };
 
   const handleSave = () => {
-    updateHeroContent(form);
+    updateHeroContent({
+      badge: form.badge,
+      showreelDuration: form.showreelDuration,
+      slideshowVideos: form.slideshowVideos || [],
+    });
     toast.success('Hero general settings saved');
   };
 
-  const hasChanges = JSON.stringify(form) !== JSON.stringify(data.heroContent);
+  const hasChanges =
+    form.badge !== data.heroContent.badge ||
+    form.showreelDuration !== data.heroContent.showreelDuration ||
+    JSON.stringify(form.slideshowVideos) !== JSON.stringify(data.heroContent.slideshowVideos);
 
   return (
     <div className="space-y-6">

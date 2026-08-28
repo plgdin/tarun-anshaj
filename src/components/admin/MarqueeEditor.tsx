@@ -79,17 +79,22 @@ const MarqueeEditor = () => {
   }
 
   const handleSave = () => {
-    updateHeroContent(form);
+    updateHeroContent({
+      marqueeRow1: form.marqueeRow1 || [],
+      marqueeRow2: form.marqueeRow2 || [],
+    });
     toast.success('Marquee section updated');
   };
 
-  const hasChanges = JSON.stringify(form) !== JSON.stringify(data.heroContent);
+  const hasChanges =
+    JSON.stringify(form.marqueeRow1) !== JSON.stringify(data.heroContent.marqueeRow1) ||
+    JSON.stringify(form.marqueeRow2) !== JSON.stringify(data.heroContent.marqueeRow2);
 
   const renderRowEditor = (row: 1 | 2, urls: string[], newUrl: string, setNewUrl: (v: string) => void) => (
     <div className="w-full max-w-3xl pt-6">
       <h3 className="text-sm font-semibold text-foreground mb-3">Marquee Row {row}</h3>
       <p className="text-sm text-muted-foreground mb-4">
-        Manage the image/video URLs for the {row === 1 ? 'first' : 'second'} layer of the scrolling marquee.
+        Manage the image/video URLs or select videos for the {row === 1 ? 'first' : 'second'} layer of the scrolling marquee.
       </p>
 
       <div className="space-y-3 mb-4">
@@ -97,18 +102,18 @@ const MarqueeEditor = () => {
           <div key={`${row}-${idx}`} className="flex items-center gap-3 bg-secondary/50 p-3 rounded-md border border-border">
             <div className="flex-1 min-w-0 flex items-center gap-2">
                {(() => {
-                 const matchedVideo = data.videos.find(v => v.thumbnail === url || v.id === url);
-                 const matchedPitch = data.pitchDecks?.find(p => p.thumbnail === url || p.id === url);
+                 const matchedVideo = data.videos.find(v => v.id === url || v.thumbnail === url || v.videoUrl === url);
+                 const matchedPitch = data.pitchDecks?.find(p => p.id === url || p.thumbnail === url || p.embedUrl === url || p.originalUrl === url);
                  if (matchedVideo) {
                    return (
-                     <span className="text-xs font-medium text-muted-foreground whitespace-nowrap shrink-0">
-                       [{matchedVideo.title}]
+                     <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded whitespace-nowrap shrink-0">
+                       [Video: {matchedVideo.title}]
                      </span>
                    );
                  } else if (matchedPitch) {
                    return (
-                     <span className="text-xs font-medium text-muted-foreground whitespace-nowrap shrink-0">
-                       [{matchedPitch.title} (Pitch Deck)]
+                     <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded whitespace-nowrap shrink-0">
+                       [Pitch Deck: {matchedPitch.title}]
                      </span>
                    );
                  }
@@ -117,8 +122,8 @@ const MarqueeEditor = () => {
                <Input
                  value={url}
                  onChange={(e) => handleUpdateUrl(row, idx, e.target.value)}
-                 className="h-8 text-sm"
-                 placeholder="https://..."
+                 className="h-8 text-sm font-mono"
+                 placeholder="Video ID or https://..."
                />
             </div>
             <div className="flex items-center gap-1">
@@ -153,7 +158,7 @@ const MarqueeEditor = () => {
         ))}
 
         {urls.length === 0 && (
-          <p className="text-sm text-muted-foreground italic py-2">No URLs added yet.</p>
+          <p className="text-sm text-muted-foreground italic py-2">No URLs or videos added yet.</p>
         )}
       </div>
 
@@ -161,12 +166,12 @@ const MarqueeEditor = () => {
         <Input
           value={newUrl}
           onChange={(e) => setNewUrl(e.target.value)}
-          placeholder="Paste new image or video URL here..."
+          placeholder="Paste video/image URL or enter video ID..."
           className="flex-1"
           onKeyDown={(e) => e.key === 'Enter' && handleAddUrl(row)}
         />
         <Button onClick={() => handleAddUrl(row)} variant="secondary" className="gap-2 shrink-0">
-          <Plus className="w-4 h-4" /> Add URL
+          <Plus className="w-4 h-4" /> Add Item
         </Button>
       </div>
 
@@ -177,9 +182,9 @@ const MarqueeEditor = () => {
             const pitch = data.pitchDecks?.find(p => p.id === val);
             const item = video || pitch;
             if (item) {
-              const valueToAdd = item.thumbnail || item.id;
+              const valueToAdd = item.id;
               const currentUrls = form[row === 1 ? 'marqueeRow1' : 'marqueeRow2'] || [];
-              if (currentUrls.includes(valueToAdd)) {
+              if (currentUrls.includes(valueToAdd) || (item.thumbnail && currentUrls.includes(item.thumbnail))) {
                 toast.error('This item is already added to the row');
                 return;
               }
@@ -195,18 +200,18 @@ const MarqueeEditor = () => {
           }
         }}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Or select an existing video or pitch deck to add its thumbnail..." />
+            <SelectValue placeholder="Or select an existing video or pitch deck to add..." />
           </SelectTrigger>
           <SelectContent>
             {data.videos
-              .filter(v => !v.thumbnail || !urls.includes(v.thumbnail))
+              .filter(v => !urls.includes(v.id) && (!v.thumbnail || !urls.includes(v.thumbnail)))
               .map((v) => (
                 <SelectItem key={v.id} value={v.id}>
                   {v.title}
                 </SelectItem>
               ))}
             {(data.pitchDecks || [])
-              .filter(p => !p.thumbnail || !urls.includes(p.thumbnail))
+              .filter(p => !urls.includes(p.id) && (!p.thumbnail || !urls.includes(p.thumbnail)))
               .map((p) => (
                 <SelectItem key={p.id} value={p.id}>
                   {p.title} (Pitch Deck)

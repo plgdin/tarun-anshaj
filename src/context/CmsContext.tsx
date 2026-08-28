@@ -40,20 +40,8 @@ const getDefaultData = (): CmsData => ({
     featuredVideoThumbnail: defaultFeaturedVideo.thumbnail,
     backgroundImage: '',
     slideshowVideos: [],
-    marqueeRow1: [
-      'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600&auto=format&fit=crop&q=80',
-    ],
-    marqueeRow2: [
-      'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1503095391755-111c1867e997?w=600&auto=format&fit=crop&q=80',
-    ],
+    marqueeRow1: ['v1', 'v2', 'v3', 'v4', 'v5'],
+    marqueeRow2: ['v6', 'v5', 'v4', 'v3', 'v2'],
     popOutHeroImage: true,
     heroImageScale: 1.9,
     heroImageXOffset: 0,
@@ -136,7 +124,7 @@ interface CmsContextType {
   data: CmsData;
   isLoading: boolean;
   updateSiteSettings: (settings: SiteSettings) => void;
-  updateHeroContent: (hero: HeroContent) => void;
+  updateHeroContent: (hero: Partial<HeroContent>) => Promise<void>;
   updateAboutContent: (content: AboutContent) => void;
   updateCategories: (categories: VideoCategory[]) => void;
   addVideo: (video: Video) => void;
@@ -245,6 +233,13 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const seedDatabase = async () => {
+    // Only seed if global_settings does not exist to avoid overwriting existing user data on temporary network glitches
+    const { data: existingSettings } = await supabase.from('global_settings').select('id').eq('id', 1).maybeSingle();
+    if (existingSettings) {
+      console.log("Settings already exist, skipping seed.");
+      return;
+    }
+
     const defaultData = getDefaultData();
     console.log("Seeding Supabase with default data...");
     
@@ -288,7 +283,7 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         let finalData = getDefaultData();
 
-        if (!categories || categories.length === 0) {
+        if (!settings && (!categories || categories.length === 0)) {
           // One-time migration for new empty Supabase project
           await seedDatabase();
           const [newSettings, newCategories, newVideos] = await Promise.all([
@@ -297,8 +292,8 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             supabase.from('videos').select('*')
           ]);
           
-          if (newCategories.data && newCategories.data.length > 0) {
-            finalData = mapSupabaseToCmsData(newSettings.data, newCategories.data || [], newVideos.data || []);
+          if (newSettings?.data || (newCategories?.data && newCategories.data.length > 0)) {
+            finalData = mapSupabaseToCmsData(newSettings?.data, newCategories?.data || [], newVideos?.data || []);
           }
         } else {
           finalData = mapSupabaseToCmsData(settings, categories || [], videos || []);
@@ -355,8 +350,8 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         ...settings.hero_content, 
         circleColor: settings.hero_content.circleColor || defaultData.heroContent.circleColor,
         slideshowVideos: settings.hero_content.slideshowVideos || [],
-        marqueeRow1: settings.hero_content.marqueeRow1 || defaultData.heroContent.marqueeRow1,
-        marqueeRow2: settings.hero_content.marqueeRow2 || defaultData.heroContent.marqueeRow2,
+        marqueeRow1: Array.isArray(settings.hero_content.marqueeRow1) ? settings.hero_content.marqueeRow1 : defaultData.heroContent.marqueeRow1,
+        marqueeRow2: Array.isArray(settings.hero_content.marqueeRow2) ? settings.hero_content.marqueeRow2 : defaultData.heroContent.marqueeRow2,
         showreelDuration: settings.hero_content.showreelDuration !== undefined ? settings.hero_content.showreelDuration : defaultData.heroContent.showreelDuration,
       } : defaultData.heroContent,
       aboutContent: {
@@ -393,9 +388,13 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (error) console.error("Error updating site settings in Supabase:", error);
   }, [updateWithHistory]);
 
-  const updateHeroContent = useCallback(async (hero: HeroContent) => {
-    updateWithHistory((d) => ({ ...d, heroContent: hero }));
-    const { error } = await supabase.from('global_settings').upsert({ id: 1, hero_content: hero });
+  const updateHeroContent = useCallback(async (hero: Partial<HeroContent>) => {
+    updateWithHistory((d) => ({ ...d, heroContent: { ...d.heroContent, ...hero } }));
+    
+    // Fetch latest DB record to ensure partial updates never overwrite other fields
+    const { data: latestRecord } = await supabase.from('global_settings').select('hero_content').eq('id', 1).maybeSingle();
+    const mergedHero = { ...(latestRecord?.hero_content || {}), ...hero };
+    const { error } = await supabase.from('global_settings').upsert({ id: 1, hero_content: mergedHero });
     if (error) console.error("Error updating hero content in Supabase:", error);
   }, [updateWithHistory]);
 
@@ -455,12 +454,12 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const reorderVideos = useCallback(async (reorderedVideos: Video[]) => {
     updateWithHistory((d) => ({ ...d, videos: reorderedVideos }));
     const videoOrder = reorderedVideos.map(v => v.id);
-    // Store video order inside hero_content JSON (avoids needing a new column)
-    const currentHero = data.heroContent;
-    const updatedHero = { ...currentHero, videoOrder };
-    const { error } = await supabase.from('global_settings').upsert({ id: 1, hero_content: updatedHero });
+    
+    const { data: latestRecord } = await supabase.from('global_settings').select('hero_content').eq('id', 1).maybeSingle();
+    const mergedHero = { ...(latestRecord?.hero_content || {}), videoOrder };
+    const { error } = await supabase.from('global_settings').upsert({ id: 1, hero_content: mergedHero });
     if (error) console.error("Error saving video order to Supabase:", error);
-  }, [updateWithHistory, data.heroContent]);
+  }, [updateWithHistory]);
 
   const updateFooterContent = useCallback(async (footerContent: FooterContent) => {
     updateWithHistory((d) => ({ ...d, footerContent }));
@@ -470,11 +469,11 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updatePitchDecks = useCallback(async (pitchDecks: PitchDeck[]) => {
     updateWithHistory((d) => ({ ...d, pitchDecks }));
-    const currentHero = data.heroContent;
-    const updatedHero = { ...currentHero, pitchDecks };
-    const { error } = await supabase.from('global_settings').upsert({ id: 1, hero_content: updatedHero });
+    const { data: latestRecord } = await supabase.from('global_settings').select('hero_content').eq('id', 1).maybeSingle();
+    const mergedHero = { ...(latestRecord?.hero_content || {}), pitchDecks };
+    const { error } = await supabase.from('global_settings').upsert({ id: 1, hero_content: mergedHero });
     if (error) console.error("Error updating pitch decks in Supabase:", error);
-  }, [updateWithHistory, data.heroContent]);
+  }, [updateWithHistory]);
 
   const getVideosByCategory = useCallback(
     (category: string) => data.videos.filter((v) => v.category === category),

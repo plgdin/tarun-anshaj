@@ -108,11 +108,24 @@ const HeroPortraitEditor = () => {
   }, [isDragging, handleMouseMove, handleTouchMove]);
 
   const handleSave = () => {
-    updateHeroContent(form);
+    updateHeroContent({
+      backgroundImage: form.backgroundImage,
+      popOutHeroImage: form.popOutHeroImage,
+      heroImageScale: form.heroImageScale,
+      heroImageXOffset: form.heroImageXOffset,
+      heroImageYOffset: form.heroImageYOffset,
+      circleColor: form.circleColor,
+    });
     toast.success('Hero Portrait alignment saved successfully');
   };
 
-  const hasChanges = JSON.stringify(form) !== JSON.stringify(data.heroContent);
+  const hasChanges =
+    form.backgroundImage !== data.heroContent.backgroundImage ||
+    form.popOutHeroImage !== data.heroContent.popOutHeroImage ||
+    form.heroImageScale !== data.heroContent.heroImageScale ||
+    form.heroImageXOffset !== data.heroContent.heroImageXOffset ||
+    form.heroImageYOffset !== data.heroContent.heroImageYOffset ||
+    form.circleColor !== data.heroContent.circleColor;
 
   return (
     <div className="space-y-6">

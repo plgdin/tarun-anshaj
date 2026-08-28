@@ -50,9 +50,6 @@ function Frontend() {
     return <div className="min-h-screen bg-darkBg" />;
   }
 
-  const selectedVideoId = data.heroContent.slideshowVideos?.[0];
-  const hasShowreelVideo = !!selectedVideoId;
-
   return (
     <div className="bg-darkBg text-textLight min-h-screen w-full overflow-x-clip">
       {/* 1. Hero Section (Eagerly loaded - critical for FCP/LCP) */}
@@ -72,14 +69,12 @@ function Frontend() {
         </Suspense>
       </LazySection>
 
-      {/* 4. Showreel Section (Very heavy video container - deferred loading) */}
-      {hasShowreelVideo && (
-        <LazySection height="100vh" rootMargin="600px">
-          <Suspense fallback={<div className="min-h-screen bg-[#050505]" />}>
-            <ShowreelSection />
-          </Suspense>
-        </LazySection>
-      )}
+      {/* 4. Showreel Section (Interactive video container) */}
+      <LazySection height="100vh" rootMargin="600px">
+        <Suspense fallback={<div className="min-h-screen bg-[#050505]" />}>
+          <ShowreelSection />
+        </Suspense>
+      </LazySection>
 
       {/* 5. Projects Section (Deferred thumbnails and modal wrapper) */}
       <LazySection height="800px" rootMargin="500px">

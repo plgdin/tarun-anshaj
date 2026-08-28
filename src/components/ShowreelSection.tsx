@@ -53,8 +53,19 @@ export const ShowreelSection: React.FC = () => {
   // Controls Panel Opacity (only fades in when fully expanded)
   const overlayOpacity = useTransform(smoothProgress, [0.75, 0.9], [0, 1]);
 
-  // Extract Direction category videos
-  const directionVideosRaw = data.videos.filter(v => v.category === 'youtube');
+  // Extract Direction / Showreel videos:
+  // 1. If slideshow videos are specifically selected in CMS, prioritize those
+  // 2. Otherwise pick youtube / direction videos
+  // 3. Fallback to any videos available in CMS or default reel
+  const chosenSlideshowVideos = (data.heroContent.slideshowVideos || [])
+    .map(id => data.videos.find(v => v.id === id))
+    .filter((v): v is Video => !!v);
+
+  const directionVideosRaw = chosenSlideshowVideos.length > 0
+    ? chosenSlideshowVideos
+    : (data.videos.filter(v => v.category === 'youtube').length > 0
+        ? data.videos.filter(v => v.category === 'youtube')
+        : data.videos);
   
   // Deduplicate direction videos by short title
   const directionVideos: Video[] = [];
@@ -67,8 +78,17 @@ export const ShowreelSection: React.FC = () => {
     }
   });
 
-  const defaultVideo = directionVideos.find(v => v.title.toLowerCase().includes('budweiser')) || directionVideos[0];
-  const [activeVideo, setActiveVideo] = useState<Video | null>(null);
+  const defaultVideo = directionVideos.find(v => v.title.toLowerCase().includes('budweiser')) || directionVideos[0] || {
+    id: 'default-showreel',
+    title: 'Cinematic Reel',
+    category: 'youtube' as const,
+    thumbnail: '',
+    duration: '2:00',
+    year: '2024',
+    description: 'Director Showreel',
+    videoUrl: '/6.mp4'
+  };
+  const [activeVideo, setActiveVideo] = useState<Video | null>(defaultVideo);
   const [isContainerHovered, setIsContainerHovered] = useState(false);
   const [isScrolledPast, setIsScrolledPast] = useState(false);
 
@@ -85,7 +105,7 @@ export const ShowreelSection: React.FC = () => {
     if (defaultVideo && (!activeVideo || !directionVideos.some(v => v.id === activeVideo.id))) {
       setActiveVideo(defaultVideo);
     }
-  }, [defaultVideo]);
+  }, [defaultVideo, directionVideos, activeVideo]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
